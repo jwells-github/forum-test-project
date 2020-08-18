@@ -4,6 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('dotenv').config()
+
+
+// Database connection  
+var mongoose = require('mongoose');
+var mongoDB = 'mongodb+srv://j:'+process.env.DB_PASSWORD+'@cluster0-bnapd.mongodb.net/'+process.env.DB_NAME+'?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
