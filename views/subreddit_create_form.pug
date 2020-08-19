@@ -1,0 +1,143 @@
+extends layout
+
+block content
+  h1 Create a Subreddit 
+  form(method='POST')
+    div.form-group
+      div
+        h2 Name
+        p no spaces, e.g., "books" or "bookclub". avoid using solely trademarked names, e.g. use "FansOfAcme" instead of "Acme". once chosen, this name cannot be changed.
+        input#name.form-control(type='text' name='name' required='true'
+                               value=(undefined===subreddit ? '' : subreddit.name))
+      div
+        h2 Title 
+        p e.g., books: made from trees or pixels. recommendations, news, or thoughts
+        input#title.form-control(type='text' name='title'
+                                    value=(undefined===subreddit ? '' : subreddit.title))
+      div
+        h2 Description 
+        p Appears in search results and social media links. 500 characters max.
+        input#description.form-control(type='text' name='description'
+                                    value=(undefined===subreddit ? '' : subreddit.description))
+      div
+        h2 Sidebar 
+        p Shown in the sidebar of your subreddit. 10240 characters max.
+        input#sidebar.form-control(type='text' name='sidebar'
+                                    value=(undefined===subreddit ? '' : subreddit.sidebar))       
+      div
+        h2 Submission Text 
+        p text to show on submission page. 1024 characters max.
+        input#submission_text.form-control(type='text' name='submission_text'
+                                    value=(undefined===subreddit ? '' : subreddit.submission_text))     
+      div
+        h2 Type
+        table
+          tbody
+            if(subreddit) 
+              tr
+                td
+                  div.form-check
+                    input#public.form-check-input(type='radio'  name='type' value='public' checked=(subreddit.type==='public' ? true : false))
+                    label.form-check-label(for='public') Public    
+                td  
+                  span anyone can view and submit
+              tr
+                td
+                  div.form-check
+                    input#restricted.form-check-input(type='radio'  name='type' value='restricted'  checked=(subreddit.type==='restricted' ? true : false))
+                    label.form-check-label(for='restricted') Restricted    
+                td  
+                  span anyone can view, but only some are approved to submit links  
+              tr
+                td
+                  div.form-check
+                    input#private.form-check-input(type='radio'  name='type' value='private' checked=(subreddit.type==='private' ? true : false))
+                    label.form-check-label(for='private') Private    
+                td  
+                  span only approved members can view and submit  
+            else
+              tr
+                td
+                  div.form-check
+                    input#public.form-check-input(type='radio'  name='type' value='public' checked=true)
+                    label.form-check-label(for='public') Public    
+                td  
+                  span anyone can view and submit
+              tr
+                td
+                  div.form-check
+                    input#restricted.form-check-input(type='radio'  name='type' value='restricted' )
+                    label.form-check-label(for='restricted') Restricted    
+                td  
+                  span anyone can view, but only some are approved to submit links  
+              tr
+                td
+                  div.form-check
+                    input#private.form-check-input(type='radio'  name='type' value='private')
+                    label.form-check-label(for='private') Private    
+                td  
+                  span only approved members can view and submit  
+
+      div
+        h2 Content Options
+        table
+          tbody
+          if(subreddit)
+            tr
+              td
+                div.form-check
+                  input#any.form-check-input(type='radio'  name='content_options' value='any' checked=(subreddit.content_options==='any' ? true : false))
+                  label.form-check-label(for='any') any    
+              td  
+                span any link type is allowed
+            tr
+              td
+                div.form-check
+                  input#links-only.form-check-input(type='radio'  name='content_options' value='links-only' checked=(subreddit.content_options==='links-only' ? true : false))
+                  label.form-check-label(for='links-only') links only    
+              td  
+                span only links to external sites are allowed
+            tr
+              td
+                div.form-check
+                  input#textposts-only.form-check-input(type='radio'  name='content_options' value='textposts-only' checked=(subreddit.content_options==='textposts-only' ? true : false))
+                  label.form-check-label(for='textposts-only') text posts only
+              td  
+                span only text/self posts are allowed    
+          else
+            tr
+              td
+                div.form-check
+                  input#any.form-check-input(type='radio'  name='content_options' value='any' checked='checked')
+                  label.form-check-label(for='any') any    
+              td  
+                span any link type is allowed
+            tr
+              td
+                div.form-check
+                  input#links-only.form-check-input(type='radio'  name='content_options' value='links-only')
+                  label.form-check-label(for='links-only') links only    
+              td  
+                span only links to external sites are allowed
+            tr
+              td
+                div.form-check
+                  input#textposts-only.form-check-input(type='radio'  name='content_options' value='textposts-only')
+                  label.form-check-label(for='textposts-only') text posts only
+              td  
+                span only text/self posts are allowed           
+      div
+        h2 Custom Submit Link Button
+        p custom label for submit link button (blank for default):
+        input#custom_submit_link_button.form-control(type='text' name='custom_submit_link_button' placeholder='Submit a new link'
+                                    value=(undefined===subreddit ? '' : subreddit.custom_submit_link_button))  
+      div
+        h2 Custom Submit Text Post Button
+        p Custom label for submit text post button (blank for default):
+        input#custom_submit_text_button.form-control(type='text' name='custom_submit_text_button' placeholder='Submit a new text post'
+                                    value=(undefined===subreddit ? '' : subreddit.custom_submit_text_button))                                                                                                                                    
+    button.btn.btn-primary(type='submit') Submit
+  if errors 
+    ul
+      for error in errors
+       li!= error.msg

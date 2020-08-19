@@ -14,7 +14,7 @@ exports.user_create_get = function(req,res,next){
 }
 
 exports.user_create_post = [
-  sanitizeBody('*').trim().escape(),
+  sanitizeBody('*').trim(),
   body('email', 'A valid email address is required').isEmail().normalizeEmail()
     .custom(value =>{
       return User.findOne({'email': value}).then(user =>{
