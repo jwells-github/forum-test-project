@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 var SubredditSchema = new Schema(
     {
-        name: {type: String, requried: true, minlength: 2},
+        name: {type: String, requried: true, minlength: 3},
         title: {type: String, required: true, maxlength: 50},
         description: {type: String, maxlength:500},
         sidebar:{type: String, maxlength: 10240},
