@@ -23,13 +23,19 @@ exports.user_create_post = [
         }
       });
     }),
-  body('username').not().isEmpty()
+  body('username', 'Usernames must be longer than 2 characters and may only contains Numbers, English characters and underscores')
+    .isLength({min:3})
     .custom(value =>{
       return User.findOne({'username': value}).then(user =>{
         if(user){
            return Promise.reject('Username in use');
         }
       });
+    })
+    .custom(value =>{
+      if(!/^[a-zA-Z0-9_]*$/gm.test(value)){
+        throw new Error('Usernames must be longer than 2 characters and may only contains Numbers, English characters and underscores')
+      }
     }),
   body('password')
     .isLength({min: 6}).withMessage('Passwords must be at least 6 characters')

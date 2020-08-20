@@ -13,13 +13,19 @@ exports.subreddit_create_get = function(req,res,next){
 
 exports.subreddit_create_post = [
   sanitizeBody('*').trim(),
-  body('name', 'Names must be longer than 2 characters').isLength({min:2})
+  body('name', 'Names must be longer than 2 characters and may only contains Numbers and English characters')
+    .isLength({min:2})
     .custom(value =>{
       return Subreddit.findOne({'name':value}).then(subreddit =>{
         if(subreddit){
           return Promise.reject('A Subreddit with this name already exists')
         }
-      });
+      }); 
+    })
+    .custom(value =>{
+      if(!/^[a-zA-Z0-9]*$/gm.test(value)){
+        throw new Error('Names must be longer than 2 characters and may only contains Numbers and English characters')
+      }
     }),
   body('title', 'titles must be less than 50 characters').isLength({max:50}),
   body('description', 'descriptions must be less than 50 characters').isLength({max:500}),
