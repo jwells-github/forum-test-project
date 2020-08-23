@@ -23,7 +23,7 @@ exports.subreddit_create_post = [
       }); 
     })
     .custom(value =>{
-      if(!/^[a-zA-Z0-9]*$/gm.test(value)){
+      if( ! /^[a-zA-Z0-9]*$/gm.test(value)){
         throw new Error('Names must be longer than 2 characters and may only contain Numbers and English characters')
       }
       return true
@@ -55,7 +55,6 @@ exports.subreddit_create_post = [
       return;
     }
     else{
-      console.log(req.body.name)
       var subreddit = new Subreddit({
         name: req.body.name,
         title: (req.body.title === '' ? req.body.name: req.body.title),
