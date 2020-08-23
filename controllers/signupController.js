@@ -36,6 +36,7 @@ exports.user_create_post = [
       if(!/^[a-zA-Z0-9_]*$/gm.test(value)){
         throw new Error('Usernames must be longer than 2 characters and may only contains Numbers, English characters and underscores')
       }
+      return true
     }),
   body('password')
     .isLength({min: 6}).withMessage('Passwords must be at least 6 characters')
