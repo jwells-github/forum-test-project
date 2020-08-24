@@ -1,10 +1,36 @@
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
+var async = require("async");
 
 const Subreddit = require('../models/subreddit');
 const Post = require('../models/post');
 
 exports.subreddit_get = function(req,res,next){
+  async.waterfall([
+    function getSubreddit (callback){
+      Subreddit.findOne({name: req.params.subredditName})
+      .exec(function(err,subreddit){
+        if(err){return next(err);}
+        if(!subreddit){
+          var err = new Error('Subreddit not found');
+          err.status = 404;
+          return next(err);
+        }
+        callback(null,subreddit);
+      });
+    },
+    function getPosts (subreddit,callback){
+      Post.find({subreddit: subreddit._id})
+      .exec(function(err,posts){
+        if(err){return next(err);}
+        callback(null,subreddit, posts)
+      });
+    }
+  ], function(err, subreddit,posts){
+    if(err){return next(err);}
+    res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit, posts:posts})
+  })
+  /*
   Subreddit.findOne({name: req.params.subredditName})
   .exec(function(err,subreddit){
     if(err){return next(err);}
@@ -17,6 +43,7 @@ exports.subreddit_get = function(req,res,next){
       res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit})
     }
   });
+  */
 }
 
 exports.subreddit_text_form_get = function(req,res,next){

@@ -3,3 +3,7 @@ extends layout
 block content
   h1= title
   h1= subreddit.name
+  if posts
+    each post in posts 
+      a(href=(post.link ==='' ? '' : post.link))= post.title  
+      br
