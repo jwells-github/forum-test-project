@@ -30,20 +30,6 @@ exports.subreddit_get = function(req,res,next){
     if(err){return next(err);}
     res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit, posts:posts})
   })
-  /*
-  Subreddit.findOne({name: req.params.subredditName})
-  .exec(function(err,subreddit){
-    if(err){return next(err);}
-    if(!subreddit){
-      var err = new Error('Subreddit not found');
-      err.status = 404;
-      return next(err);
-    }
-    else{
-      res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit})
-    }
-  });
-  */
 }
 
 exports.subreddit_text_form_get = function(req,res,next){
@@ -133,7 +119,7 @@ exports.subreddit_post =[
           });
           post.save(function(err){
             if(err){return next(err);}
-            return res.redirect('/');
+            return res.redirect('/r/'+subreddit.name+'/'+post._id);
           })
         }
       });
