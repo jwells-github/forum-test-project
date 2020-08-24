@@ -42,7 +42,7 @@ exports.post_comment_post = [
       });
       comment.save(function(err){
         if(err){return next(err);}
-        return res.redirect('/');
+        return res.redirect(req.originalUrl);
       })
     })
   }
