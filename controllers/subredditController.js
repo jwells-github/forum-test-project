@@ -70,7 +70,7 @@ exports.subreddit_create_post = [
       });
       subreddit.save(function(err){
         if(err){return next(err);}
-        return res.redirect('/');
+        return res.redirect('/r/'+subreddit.name);
       })
     }
   }
