@@ -13,6 +13,8 @@ router.get('/:subredditName/submit/link', subredditDetailController.subreddit_li
 
 router.post('/:subredditName/submit/link', subredditDetailController.subreddit_post);
 
-router.get('/:subredditName/:postID', postDetailController.post_get)
+router.get('/:subredditName/:postID', postDetailController.post_get);
+
+router.post('/:subredditName/:postID', postDetailController.post_comment_post);
 
 module.exports = router;

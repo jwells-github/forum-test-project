@@ -4,4 +4,10 @@ block content
   h1= title
   if post.text !== ''
     p= post.text
-  
+  form(method='POST')
+    div.form-group
+      textarea#text.form-control(type='text' name='text' required='true')
+    button.btn.btn-primary(type='submit') Submit
+  if comments
+    each comment in comments
+      p= comment.text

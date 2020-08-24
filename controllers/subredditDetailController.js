@@ -86,12 +86,6 @@ exports.subreddit_link_form_get = function(req,res,next){
   }
 }
 
-// url
-//  title
-// 
-
-// text
-// title
 exports.subreddit_post =[
   sanitizeBody('*').trim(),
   body('title', 'Posts require a title').escape().isLength({min:1}),
@@ -136,7 +130,7 @@ exports.subreddit_post =[
             link: req.body.link,
             submitter: res.locals.currentUser,
             subreddit: subreddit._id,
-          })
+          });
           post.save(function(err){
             if(err){return next(err);}
             return res.redirect('/');
