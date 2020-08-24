@@ -5,5 +5,10 @@ block content
   h1= subreddit.name
   if posts
     each post in posts 
-      a(href=(post.link ==='' ? '' : post.link))= post.title  
-      br
+      div
+        - var detailURL = '/r/' + subreddit.name + '/' + post._id
+        a(href=(post.link ==='' ? detailURL : post.link))
+          = post.title  
+        br
+        a(href=detailURL) comments
+        br
