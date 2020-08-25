@@ -10,6 +10,8 @@ var CommentSchema = new Schema(
         text:{type:String, requried:true, maxlength: 10000},
         submitter: {type:Schema.Types.ObjectId, ref:'user'},
         date_created_at: {type: Date, default: Date.now},
+        is_sub_comment: {type:Boolean, default: false},
+        sub_comments: [{type:Schema.Types.ObjectId, ref:'comment'}],
         edited: Boolean,
         date_last_edited: Date, 
     }

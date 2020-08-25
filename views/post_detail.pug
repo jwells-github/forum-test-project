@@ -1,10 +1,32 @@
 extends layout
 
+
+mixin sC(subcomments)
+  if subcomments
+    if subcomments.length !== 0
+      each subcomment in subcomments
+        div
+          //- The sub comments of sub comments are not populated so they need to be found 
+          //- from the already populated comments object
+          - var foundComment = comments.find(comment => String(comment._id) === String(subcomment._id) )
+          p= foundComment.text
+          p= subcomment._id
+          if locals.currentUser
+            form(method='POST')
+              div.form-group
+                textarea#text.form-control(type='text' name='text' required='true')
+                input(type='hidden' name='parentCommentID' value=subcomment._id)
+              button.btn.btn-primary(type='submit') Submit 
+          div
+            +sC(subcomment.sub_comments)
+    
+
 block content
   h1= title
   if post.text !== ''
     p= post.text
   if locals.currentUser
+    p real form not sub form
     form(method='POST')
       div.form-group
         textarea#text.form-control(type='text' name='text' required='true')
@@ -13,4 +35,16 @@ block content
     p You must be logged in to post comments
   if comments
     each comment in comments
-      p= comment.text
+      if comment.is_sub_comment === false
+        div
+          p= comment.text
+          if locals.currentUser
+            form(method='POST')
+              div.form-group
+                textarea#text.form-control(type='text' name='text' required='true')
+                p=comment._id
+                input(type='hidden' name='parentCommentID' value=comment._id)
+              button.btn.btn-primary(type='submit') Submit 
+          if comment.sub_comments
+            div
+              +sC(comment.sub_comments)
