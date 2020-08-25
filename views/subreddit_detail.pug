@@ -10,5 +10,5 @@ block content
         a(href=(post.link ==='' ? detailURL : post.link))
           = post.title  
         br
-        a(href=detailURL) comments
+        a(href=detailURL) #{post.number_of_comments} comments
         br
