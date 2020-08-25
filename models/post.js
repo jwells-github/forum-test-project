@@ -10,6 +10,7 @@ var PostSchema = new Schema(
         link:{type:String, default:''},
         submitter: {type:Schema.Types.ObjectId, ref:'user'},
         subreddit: {type:Schema.Types.ObjectId, ref:'subreddit'},
+        number_of_comments: {type: Number, default: 0},
         date_created_at: {type: Date, default: Date.now},
         edited: Boolean,
         date_last_edited: Date, 
