@@ -3,5 +3,6 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  if (locals.currentUser)
+  if locals.currentUser
     p YOU ARE LOGGED IN
+    a(href="/subreddits/create") create sub
