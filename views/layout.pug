@@ -7,7 +7,9 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     if(locals.currentUser)
-      a(href='/logout') logout
+      a(href='/logout') Logout
     else
-      a(href="/login") login
+      a(href="/login") Login
+      br
+      a(href='/signup') Signup
     block content
