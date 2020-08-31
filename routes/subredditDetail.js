@@ -13,6 +13,8 @@ router.get('/:subredditName/submit/link', subredditDetailController.subreddit_li
 
 router.post('/:subredditName/submit/link', subredditDetailController.subreddit_post);
 
+router.post('/:subredditName/delete/:postID', subredditDetailController.subreddit_post_delete);
+
 router.get('/:subredditName/:postID', postDetailController.post_get);
 
 router.post('/:subredditName/:postID', postDetailController.post_comment_post);

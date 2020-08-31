@@ -1,0 +1,11 @@
+.toggle .option{
+  display:none;
+}
+
+.toggle .active{
+  display: inline;  
+}
+
+.delete-hide{
+  display:none;
+}

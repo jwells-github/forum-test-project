@@ -76,7 +76,7 @@ exports.subreddit_post =[
   sanitizeBody('*').trim(),
   body('title', 'Posts require a title').escape().isLength({min:1}),
   body('link', 'Please enter a valid url').custom(value =>{
-    if(/\b(https?|ftp|file):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|]/.test(value)){
+    if(/\b(https?):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|]/.test(value)){
       return true;
     }
     if(value === undefined){
@@ -127,3 +127,26 @@ exports.subreddit_post =[
     }
   }
 ]
+
+exports.subreddit_post_delete = (req,res,next) =>{
+  if(res.locals.currentUser){ 
+    Post.findById(req.params.postID)
+    .exec(function(err,post){
+      if(err){return next(err);}
+      if(!post){
+        var err = new Error('Post not found');
+        err.status = 404;
+        return next(err);
+      }
+      if(res.locals.currentUser._id.equals(post.submitter)){
+        console.log('snap')
+        post.is_deleted =  true;
+        post.date_last_edited = Date.now();
+        post.save(function(err){
+          if(err){return next(err);}
+          return res.sendStatus(200);
+        });
+      }
+    })
+  }
+}
