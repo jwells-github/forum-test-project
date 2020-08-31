@@ -11,5 +11,3 @@ async function fetchPost(url = '') {
     });
   return response; 
 }
-
-export{ fetchPost };
