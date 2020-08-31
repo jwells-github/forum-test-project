@@ -39,37 +39,42 @@ exports.post_comment_post = [
   (req,res,next) =>{
     Post.findById(req.params.postID).exec(function(err,post){
       if(err){return next(err);}
+      var comment = new Comment({
+        post: post._id,
+        text:req.body.text,
+        submitter:res.locals.currentUser,
+      });
       if(req.body.parentCommentID){
-        var comment = new Comment({
-          post: post._id,
-          text:req.body.text,
-          submitter:res.locals.currentUser,
-          is_sub_comment: true,
-        });
+        comment.is_sub_comment = true;
         comment.save(function(err){
           if(err){return next(err);}
           Comment.findById(req.body.parentCommentID).exec(function(err,parentComment){
             parentComment.sub_comments.push(comment)
             parentComment.save(function(err){
               if(err){return next(err);}
-              return res.redirect(req.originalUrl);
+                incrementPostComments(post._id)
+                return res.redirect(req.originalUrl);
             })
-
           })
         })
       }
       else{
-        var comment = new Comment({
-          post: post._id,
-          text:req.body.text,
-          submitter:res.locals.currentUser,
-        });
         comment.save(function(err){
           if(err){return next(err);}
+          incrementPostComments(post._id)
           return res.redirect(req.originalUrl);
         })
       }
     })
   }
-  
 ]
+
+function incrementPostComments(postID){
+  Post.update(
+    {_id: postID},
+    {$inc: {number_of_comments: 1}}
+    ,function(err){
+      if(err){return next(err);}
+      return;
+    })
+}
