@@ -3,12 +3,25 @@ extends layout
 block content
   h1= title
   h1= subreddit.name
+  a(href= subreddit.name+'/submit/link') Submit a link
+  br
+  a(href= subreddit.name+'/submit/text') Submit a text post
+  br
+  br
+  
   if posts
     each post in posts 
       div
-        - var detailURL = '/r/' + subreddit.name + '/' + post._id
+        - let detailURL = '/r/' + subreddit.name + '/' + post._id
         a(href=(post.link ==='' ? detailURL : post.link))
           = post.title  
         br
-        a(href=detailURL) #{post.number_of_comments} comments
+        - let commentString = (post.number_of_comments === 1 ? 'comment' : 'comments')
+        a(href=detailURL) #{post.number_of_comments} #{commentString}
         br
+        if locals.currentUser
+          if String(locals.currentUser._id) === String(post.submitter)
+            p Delete
+            br
+        br
+
