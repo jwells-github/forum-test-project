@@ -15,7 +15,6 @@ module.exports = function(passport) {
         if(err){return done(err);}
         // passwords match
         if(res){
-          console.log('passwords match');
           return done(null, user);}
         else{ return done(null, false, {message: "Incorrect password"});}
       });
@@ -25,13 +24,10 @@ module.exports = function(passport) {
   ))
   
   passport.serializeUser(function(user, done) {
-    console.log('cereal')
-    console.log(user.id);
     return done(null, user.id);
   });
 
   passport.deserializeUser(function(id, done) {
-    console.log('decereal')
     User.findById(id, function(err, user) {
       return done(err, user);
     });
