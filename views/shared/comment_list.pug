@@ -3,15 +3,8 @@ if comments
   div
     each comment in comments
       if comment.is_sub_comment === false
-        div
-          p= comment.text
-          if locals.currentUser
-            form(method='POST')
-              div.form-group
-                textarea#text.form-control(type='text' name='text' required='true')
-                p=comment._id
-                input(type='hidden' name='parentCommentID' value=comment._id)
-              button.btn.btn-primary(type='submit') Submit 
+        div.comment
+          include comment.pug
           if comment.sub_comments
             div
               +getSubComments(comment.sub_comments)

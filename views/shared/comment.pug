@@ -1,0 +1,9 @@
+p= comment.text
+p= comment._id
+if locals.currentUser
+  form(method='POST')
+    div.form-group
+      textarea#text.form-control(type='text' name='text' required='true')
+      p=comment._id
+      input(type='hidden' name='parentCommentID' value=comment._id)
+    button.btn.btn-primary(type='submit') Submit 
