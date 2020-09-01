@@ -12,5 +12,6 @@ if posts
           br
           if locals.currentUser
             if String(locals.currentUser._id) === String(post.submitter)
+              -let onClickPath = "deletePost('"+post._id+"', this)"
               include delete_confirmation.pug
           br

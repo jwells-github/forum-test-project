@@ -4,7 +4,7 @@ form(action='#').toggle
   span.option
     span.errorMessage
     | are you sure? 
-    a(href='javascript:;' onclick="deletePost('" + post._id + "', '"+subreddit.name+"',this)") Yes
+    a(href='javascript:;' onclick=onClickPath) Yes
     |  / 
     a(href="javascript:;" onclick='toggleConfirmation(this)') No
 br

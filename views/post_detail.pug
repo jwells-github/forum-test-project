@@ -1,26 +1,5 @@
 extends layout
 
-
-mixin sC(subcomments)
-  if subcomments
-    if subcomments.length !== 0
-      each subcomment in subcomments
-        div
-          //- The sub comments of sub comments are not populated so they need to be found 
-          //- from the already populated comments object
-          - var foundComment = comments.find(comment => String(comment._id) === String(subcomment._id) )
-          p= foundComment.text
-          p= subcomment._id
-          if locals.currentUser
-            form(method='POST')
-              div.form-group
-                textarea#text.form-control(type='text' name='text' required='true')
-                input(type='hidden' name='parentCommentID' value=subcomment._id)
-              button.btn.btn-primary(type='submit') Submit 
-          div
-            +sC(subcomment.sub_comments)
-    
-
 block content
   h1= title
   if post.text !== ''
@@ -34,4 +13,9 @@ block content
   else
     p You must be logged in to post comments
   include shared/comment_list.pug
+  script
+    include ../public/javascripts/postDelete.js
+    include ../public/javascripts/toggleActionConfirmation.js
+    include ../public/javascripts/fetchPost.js
+
 
