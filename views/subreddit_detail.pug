@@ -8,31 +8,7 @@ block content
   a(href= subreddit.name+'/submit/text') Submit a text post
   br
   br
-  
-  if posts
-    each post in posts 
-      if !post.is_deleted
-        div
-          - let detailURL = '/r/' + subreddit.name + '/' + post._id
-          a(href=(post.link ==='' ? detailURL : post.link))
-            = post.title  
-          br
-          - let commentString = (post.number_of_comments === 1 ? 'comment' : 'comments')
-          a(href=detailURL) #{post.number_of_comments} #{commentString}
-          br
-          if locals.currentUser
-            if String(locals.currentUser._id) === String(post.submitter)
-              form(action='#').toggle
-                span.option.active
-                  a(href='javascript:;' onclick='toggleConfirmation(this)') Delete
-                span.option
-                  span.errorMessage
-                  | are you sure? 
-                  a(href='javascript:;' onclick="deletePost('" + post._id + "', '"+subreddit.name+"',this)") Yes
-                  |  / 
-                  a(href="javascript:;" onclick='toggleConfirmation(this)') No
-              br
-          br
+  include shared/post_list.pug
   script
     include ../public/javascripts/postDelete.js
     include ../public/javascripts/toggleActionConfirmation.js
