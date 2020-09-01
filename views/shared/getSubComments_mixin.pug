@@ -1,7 +1,4 @@
-extends layout
-
-
-mixin sC(subcomments)
+mixin getSubComments(subcomments)
   if subcomments
     if subcomments.length !== 0
       each subcomment in subcomments
@@ -18,20 +15,4 @@ mixin sC(subcomments)
                 input(type='hidden' name='parentCommentID' value=subcomment._id)
               button.btn.btn-primary(type='submit') Submit 
           div
-            +sC(subcomment.sub_comments)
-    
-
-block content
-  h1= title
-  if post.text !== ''
-    p= post.text
-  if locals.currentUser
-    p real form not sub form
-    form(method='POST')
-      div.form-group
-        textarea#text.form-control(type='text' name='text' required='true')
-      button.btn.btn-primary(type='submit') Submit
-  else
-    p You must be logged in to post comments
-  include shared/comment_list.pug
-
+            +getSubComments(subcomment.sub_comments) 
