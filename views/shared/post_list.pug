@@ -12,14 +12,5 @@ if posts
           br
           if locals.currentUser
             if String(locals.currentUser._id) === String(post.submitter)
-              form(action='#').toggle
-                span.option.active
-                  a(href='javascript:;' onclick='toggleConfirmation(this)') Delete
-                span.option
-                  span.errorMessage
-                  | are you sure? 
-                  a(href='javascript:;' onclick="deletePost('" + post._id + "', '"+subreddit.name+"',this)") Yes
-                  |  / 
-                  a(href="javascript:;" onclick='toggleConfirmation(this)') No
-              br
+              include delete_confirmation.pug
           br
