@@ -49,6 +49,7 @@ exports.post_comment_post = [
         comment.save(function(err){
           if(err){return next(err);}
           Comment.findById(req.body.parentCommentID).exec(function(err,parentComment){
+            if(err){return next(err);}
             parentComment.sub_comments.push(comment)
             parentComment.save(function(err){
               if(err){return next(err);}
