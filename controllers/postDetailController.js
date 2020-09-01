@@ -35,38 +35,40 @@ exports.post_get = function(req,res,next){
 
 exports.post_comment_post = [
   sanitizeBody('*').trim(),
-  body('text').isLength({max:10000}),
+  body('text').isLength({max:10000}).isLength({min:1}),
   (req,res,next) =>{
-    Post.findById(req.params.postID).exec(function(err,post){
-      if(err){return next(err);}
-      var comment = new Comment({
-        post: post._id,
-        text:req.body.text,
-        submitter:res.locals.currentUser,
-      });
-      if(req.body.parentCommentID){
-        comment.is_sub_comment = true;
-        comment.save(function(err){
-          if(err){return next(err);}
-          Comment.findById(req.body.parentCommentID).exec(function(err,parentComment){
+    if(res.locals.currentUser){
+      Post.findById(req.params.postID).exec(function(err,post){
+        if(err){return next(err);}
+        var comment = new Comment({
+          post: post._id,
+          text:req.body.text,
+          submitter:res.locals.currentUser,
+        });
+        if(req.body.parentCommentID){
+          comment.is_sub_comment = true;
+          comment.save(function(err){
             if(err){return next(err);}
-            parentComment.sub_comments.push(comment)
-            parentComment.save(function(err){
+            Comment.findById(req.body.parentCommentID).exec(function(err,parentComment){
               if(err){return next(err);}
-                incrementPostComments(post._id)
-                return res.redirect(req.originalUrl);
+              parentComment.sub_comments.push(comment)
+              parentComment.save(function(err){
+                if(err){return next(err);}
+                  incrementPostComments(post._id)
+                  return res.redirect(req.originalUrl);
+              })
             })
           })
-        })
-      }
-      else{
-        comment.save(function(err){
-          if(err){return next(err);}
-          incrementPostComments(post._id)
-          return res.redirect(req.originalUrl);
-        })
-      }
-    })
+        }
+        else{
+          comment.save(function(err){
+            if(err){return next(err);}
+            incrementPostComments(post._id)
+            return res.redirect(req.originalUrl);
+          })
+        }
+      })
+    }
   }
 ]
 
