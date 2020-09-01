@@ -128,25 +128,3 @@ exports.subreddit_post =[
   }
 ]
 
-exports.subreddit_post_delete = (req,res,next) =>{
-  if(res.locals.currentUser){ 
-    Post.findById(req.params.postID)
-    .exec(function(err,post){
-      if(err){return next(err);}
-      if(!post){
-        var err = new Error('Post not found');
-        err.status = 404;
-        return next(err);
-      }
-      if(res.locals.currentUser._id.equals(post.submitter)){
-        console.log('snap')
-        post.is_deleted =  true;
-        post.date_last_edited = Date.now();
-        post.save(function(err){
-          if(err){return next(err);}
-          return res.sendStatus(200);
-        });
-      }
-    })
-  }
-}
