@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+.comment{
+  padding-left: 20px;
+  border: 1px solid black;
+}
