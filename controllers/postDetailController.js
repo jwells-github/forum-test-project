@@ -21,6 +21,7 @@ exports.post_get = function(req,res,next){
     function getComments(post, callback){
       Comment.find({post: post._id})
       .populate('sub_comments')
+      .populate('submitter')
       .exec(function(err,comments){
         if(err){return next(err);}
         callback(null, post, comments);

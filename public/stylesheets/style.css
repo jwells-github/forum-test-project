@@ -7,7 +7,22 @@ a {
   color: #00B7FF;
 }
 
-.comment{
+.comment-chain, .post{
   padding-left: 20px;
   border: 1px solid black;
+}
+
+.comment{
+  display:flex;
+}
+
+.comment-body{
+  flex-grow: 1;
+  margin: 12px;
+}
+
+.voting-arrows{
+  display:flex;
+  flex-direction: column;
+  margin-left: -18px;
 }

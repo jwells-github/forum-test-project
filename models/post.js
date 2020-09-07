@@ -6,8 +6,8 @@ var PostSchema = new Schema(
         title: {type: String, required: true, maxlength: 50},
         text:{type:String, default:'', maxlength: 40000},
         link:{type:String, default:''},
-        submitter: {type:Schema.Types.ObjectId, ref:'user'},
-        subreddit: {type:Schema.Types.ObjectId, ref:'subreddit'},
+        submitter: {type:Schema.Types.ObjectId, ref:'User'},
+        subreddit: {type:Schema.Types.ObjectId, ref:'Subreddit'},
         number_of_comments: {type: Number, default: 0},
         date_created_at: {type: Date, default: Date.now},
         upvote_count: {type:Number, default:0},
@@ -18,4 +18,4 @@ var PostSchema = new Schema(
     }
 )
 
-module.exports = mongoose.model('post', PostSchema);
+module.exports = mongoose.model('Post', PostSchema);

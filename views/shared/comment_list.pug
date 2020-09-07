@@ -3,11 +3,16 @@ if comments
   div
     each comment in comments
       if comment.is_sub_comment === false
-        div.comment
+        div.comment-chain
           include comment.pug
           if comment.sub_comments
             div
               +getSubComments(comment.sub_comments)
+script
+  include ../../public/javascripts/postDelete.js
+  include ../../public/javascripts/commentVote.js
+  include ../../public/javascripts/toggleActionConfirmation.js
+  include ../../public/javascripts/fetchPost.js
 
 
 

@@ -2,7 +2,7 @@ mixin getSubComments(subcomments)
   if subcomments
     if subcomments.length !== 0
       each subcomment in subcomments
-        div.comment
+        div.comment-chain
           //- The sub comments of sub comments are not populated so they need to be found 
           //- from the already populated comments object
           - let comment = comments.find(foundComment => String(foundComment._id) === String(subcomment._id) )

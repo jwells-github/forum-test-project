@@ -2,7 +2,7 @@ if posts
   div
     each post in posts 
       if !post.is_deleted
-        div
+        div.post
           - let detailURL = '/r/' + subreddit.name + '/' + post._id
           a(href=(post.link ==='' ? detailURL : post.link))
             = post.title  
