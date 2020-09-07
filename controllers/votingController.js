@@ -17,27 +17,24 @@ exports.comment_vote = (req,res,next) => {
           Comment.findById(req.params.commentID).exec(callback);
         },
         existing_upvote: function(callback){
-          CommentUpvote.findOne({comment: req.params.commentID, submitter:res.locals.currentUser._id}).exec(callback);
+          CommentUpvote.findOne({comment: req.params.commentID, submitter: res.locals.currentUser._id}).exec(callback);
         },
         existing_downvote: function(callback){
-          CommentDownvote.findOne({comment: req.params.commentID, submitter:res.locals.currentUser._id}).exec(callback);
+          CommentDownvote.findOne({comment: req.params.commentID, submitter: res.locals.currentUser._id}).exec(callback);
         }
       }, function(err,results){
         if(err){return next(err);}
         
+        // Remove an existing upvote
         if(results.existing_upvote){
           (vote_direction === 1 ? vote_withdrawal = true : vote_change = true);
-          console.log('withdraw: ' + vote_withdrawal);
-          console.log('change: ' + vote_change);
           CommentUpvote.findByIdAndDelete(results.existing_upvote._id).exec(function(err,vote){
             if(err){return next(err);}
           });
         }
+        // Remove an existing downvote
         else if(results.existing_downvote){
-          console.log('downvote');
           (vote_direction === 0 ? vote_withdrawal = true : vote_change = true);
-          console.log('withdraw: ' + vote_withdrawal);
-          console.log('change: ' + vote_change);
           CommentDownvote.findByIdAndDelete(results.existing_downvote._id).exec(function(err,vote){
             if(err){return next(err);}
           });
