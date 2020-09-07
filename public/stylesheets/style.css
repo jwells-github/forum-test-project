@@ -7,7 +7,20 @@ a {
   color: #00B7FF;
 }
 
-.comment-chain, .post{
+
+.post-list{
+  padding-left:20px;
+}
+
+.post{
+  display:flex;
+}
+
+.post-body{
+  margin: 0 10px;
+}
+
+.comment-chain {
   padding-left: 20px;
   border: 1px solid black;
 }
