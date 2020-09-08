@@ -18,6 +18,8 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var indexRouter = require('./routes/index');
+var deletionRouter = require('./routes/deletion');
+var votingRouter = require('./routes/voting');
 var signupRouter = require('./routes/signup');
 var loginRouter = require('./routes/login');
 var subredditRouter = require('./routes/subreddit');
@@ -45,6 +47,8 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', indexRouter);
+app.use('/delete', deletionRouter)
+app.use('/vote', votingRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/subreddits', subredditRouter);

@@ -14,10 +14,18 @@ a {
 
 .post{
   display:flex;
+  height:100px
 }
 
 .post-body{
   margin: 0 10px;
+}
+
+.post-score{
+  text-align: center;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 .comment-chain {
