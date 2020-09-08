@@ -1,6 +1,6 @@
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
-var async = require("async");
+const async = require("async");
 
 const Subreddit = require('../models/subreddit');
 const Post = require('../models/post');

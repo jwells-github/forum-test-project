@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 
 
-var CommentSchema = new Schema(
+const CommentSchema = new Schema(
     {
         post:{type:Schema.Types.ObjectId, ref:'Post'},
         text:{type:String, requried:true, maxlength: 10000},

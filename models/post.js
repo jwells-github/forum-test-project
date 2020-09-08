@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var PostSchema = new Schema(
+const PostSchema = new Schema(
     {
         title: {type: String, required: true, maxlength: 50},
         text:{type:String, default:'', maxlength: 40000},
@@ -17,5 +17,7 @@ var PostSchema = new Schema(
         date_last_edited: Date, 
     }
 )
+
+
 
 module.exports = mongoose.model('Post', PostSchema);

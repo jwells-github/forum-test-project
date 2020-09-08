@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var CommentDownvoteSchema = new Schema(
+const CommentDownvoteSchema = new Schema(
     {
         comment:{type:Schema.Types.ObjectId, ref:'Comment'},
         submitter: {type:Schema.Types.ObjectId, ref:'User'},

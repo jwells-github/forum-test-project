@@ -4,7 +4,7 @@ const PostDownvote =  require('../models/votes/post_downvote');
 const Comment =  require('../models/comment');
 const CommentUpvote =  require('../models/votes/comment_upvote');
 const CommentDownvote =  require('../models/votes/comment_downvote');
-var async = require("async");
+const async = require("async");
 
 
 exports.comment_vote = (req,res,next) => {
