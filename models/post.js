@@ -18,6 +18,8 @@ const PostSchema = new Schema(
     }
 )
 
-
+PostSchema.virtual('vote_score').get(function(){
+    return this.upvote_count - this.downvote_count;
+});
 
 module.exports = mongoose.model('Post', PostSchema);
