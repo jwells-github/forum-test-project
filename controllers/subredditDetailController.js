@@ -9,6 +9,7 @@ exports.subreddit_get = function(req,res,next){
   async.waterfall([
     function getSubreddit (callback){
       Subreddit.findOne({name: req.params.subredditName})
+      .populate('moderators')
       .exec(function(err,subreddit){
         if(err){return next(err);}
         if(!subreddit){
@@ -25,7 +26,7 @@ exports.subreddit_get = function(req,res,next){
         if(err){return next(err);}
         callback(null,subreddit, posts)
       });
-    }
+    },
   ], function(err, subreddit,posts){
     if(err){return next(err);}
     res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit, posts:posts})

@@ -1,7 +1,7 @@
 if posts
   div
     each post in posts 
-      if !post.is_deleted
+      if !post.is_deleted && !post.is_removed
         div.post
           div.voting-arrows 
             button(onclick="upvotePost('"+post._id +"',this)") ^
@@ -16,6 +16,11 @@ if posts
             br
             if locals.currentUser
               if String(locals.currentUser._id) === String(post.submitter)
-                -let onClickPath = "deletePost('"+post._id+"', this)"
-                include delete_confirmation.pug
+                -let clickAction = "deletePost('"+post._id+"', this)"
+                -let actionName = 'Delete'
+                include action_confirmation.pug
+            if is_moderator
+                -let clickAction = "removePost('"+subreddit.name+"', '"+post._id+"', this)"
+                -let actionName = 'Remove'
+                include action_confirmation.pug
           br

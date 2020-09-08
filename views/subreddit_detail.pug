@@ -1,6 +1,11 @@
 extends layout
 
 block content
+  - let is_moderator = false;
+  if locals.currentUser
+    - let mod = subreddit.moderators.find(moderator => String(moderator.user) === String(locals.currentUser._id))
+    if mod
+      - is_moderator = true;
   h1= title
   h1= subreddit.name
   a(href= subreddit.name+'/submit/link') Submit a link
@@ -11,6 +16,7 @@ block content
   include shared/post_list.pug
   script
     include ../public/javascripts/postDelete.js
+    include ../public/javascripts/postRemoval.js
     include ../public/javascripts/postVote.js
     include ../public/javascripts/toggleActionConfirmation.js
     include ../public/javascripts/fetchPost.js

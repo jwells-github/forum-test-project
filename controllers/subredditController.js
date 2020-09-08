@@ -1,4 +1,5 @@
 const Subreddit = require('../models/subreddit');
+const SubredditModerator = require('../models/subreddit_moderator');
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 
@@ -55,23 +56,34 @@ exports.subreddit_create_post = [
       return;
     }
     else{
-      var subreddit = new Subreddit({
-        name: req.body.name,
-        title: (req.body.title === '' ? req.body.name: req.body.title),
-        description: req.body.description,
-        sidebar: req.body.sidebar,
-        submission_text: req.body.submission_text,
-        type: req.body.type, 
-        approved_users: [res.locals.currentUser],
-        moderators: [res.locals.currentUser],
-        content_options: req.body.content_options,
-        custom_submit_link_button: req.body.custom_submit_link_button,
-        custom_submit_text_button: req.body.custom_submit_text_button
-      });
-      subreddit.save(function(err){
-        if(err){return next(err);}
-        return res.redirect('/r/'+subreddit.name);
+      var subreddit_moderator = new SubredditModerator({
+        user: res.locals.currentUser._id,
+        can_appoint: true,
+        can_ban: true,
+        can_edit_sub_details: true,
+        can_remove: true
       })
+      subreddit_moderator.save(function(err, moderator){
+        if(err){return next(err);}
+        var subreddit = new Subreddit({
+          name: req.body.name,
+          title: (req.body.title === '' ? req.body.name: req.body.title),
+          description: req.body.description,
+          sidebar: req.body.sidebar,
+          submission_text: req.body.submission_text,
+          type: req.body.type, 
+          approved_users: [res.locals.currentUser],
+          moderators: [moderator._id],
+          content_options: req.body.content_options,
+          custom_submit_link_button: req.body.custom_submit_link_button,
+          custom_submit_text_button: req.body.custom_submit_text_button
+        });
+        subreddit.save(function(err){
+          if(err){return next(err);}
+          return res.redirect('/r/'+subreddit.name);
+        })
+      })
+
     }
   }
 

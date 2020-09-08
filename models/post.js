@@ -14,6 +14,7 @@ const PostSchema = new Schema(
         downvote_count: {type:Number, default:0},
         is_deleted: {type:Boolean, default:false},
         is_edited: {type:Boolean, default:false},
+        is_removed: {type:Boolean, default:false},
         date_last_edited: Date, 
     }
 )

@@ -1,17 +1,23 @@
 div.comment
-  if !comment.is_deleted
+  if !comment.is_deleted && !comment.is_removed
     div.voting-arrows 
         button(onclick="upvoteComment('"+comment._id +"',this)") ^
         button(onclick="downvoteComment('"+comment._id +"',this)") v
   div.comment-body
-    p= (comment.is_deleted ? 'Deleted' : comment.text)
-    p= (comment.is_deleted ? 'Deleted' : comment.submitter.username)
+    p= (comment.is_deleted || comment.is_removed ? 'Deleted' : comment.text)
+    p= (comment.is_deleted || comment.is_removed ? 'Deleted' : comment.submitter.username)
     p= comment._id
     if locals.currentUser
-      if !comment.is_deleted
+      if !comment.is_deleted && !comment.is_removed
         if String(locals.currentUser._id) === String(comment.submitter._id)
           -let onClickPath = "deleteComment('"+  comment._id + "',this)"
-          include delete_confirmation.pug
+          -let actionName = 'Delete'
+          include action_confirmation.pug
+        if is_moderator
+          -let clickAction = "removeComment('"+post.subreddit.name+"', '"+comment._id+"', this)"
+          -let actionName = 'Remove'
+          include action_confirmation.pug
+
       form(method='POST')
         div.form-group
           textarea#text.form-control(type='text' name='text' required='true')

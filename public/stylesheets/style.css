@@ -45,5 +45,8 @@ a {
 .voting-arrows{
   display:flex;
   flex-direction: column;
+}
+
+.comment .voting-arrows{ 
   margin-left: -18px;
 }

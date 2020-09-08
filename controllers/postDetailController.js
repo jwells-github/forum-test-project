@@ -8,7 +8,14 @@ const Comment = require("../models/comment");
 exports.post_get = function(req,res,next){
   async.waterfall([
     function getPost (callback){
-      Post.findById(req.params.postID).exec(function(err,post){
+      Post.findById(req.params.postID)
+      .populate({
+        path:'subreddit',
+        populate: {
+          path: 'moderators'
+        }
+      })
+      .exec(function(err,post){
         if(err){return next(err);}
         if(!post){
           var err = new Error('Post not found');
