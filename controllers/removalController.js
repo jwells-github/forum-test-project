@@ -4,7 +4,6 @@ const Comment =  require('../models/comment');
 const async = require("async");
 
 exports.comment_remove_toggle = (req,res,next) =>{
-  console.log('remove')
   if(res.locals.currentUser){
     async.parallel({
       comment: function(callback){
@@ -25,7 +24,7 @@ exports.comment_remove_toggle = (req,res,next) =>{
         let mod = results.subreddit.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id));
         if(mod){
           if(mod.can_remove){
-            results.comment.is_removed = true;
+            results.comment.is_removed = !results.comment.is_removed;
             results.comment.save(function(err){
               if(err){return next(err);}
               return res.sendStatus(200);
@@ -61,7 +60,7 @@ exports.post_remove_toggle = (req,res,next)=>{
         let mod = results.subreddit.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id));
         if(mod){
           if(mod.can_remove){
-            results.post.is_removed = true;
+            results.post.is_removed = !results.post.is_removed;
             results.post.save(function(err){
               if(err){return next(err);}
               return res.sendStatus(200);
