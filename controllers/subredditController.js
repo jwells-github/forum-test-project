@@ -58,6 +58,7 @@ exports.subreddit_create_post = [
     else{
       var subreddit_moderator = new SubredditModerator({
         user: res.locals.currentUser._id,
+        head_mod: true,
         can_appoint: true,
         can_ban: true,
         can_edit_sub_details: true,

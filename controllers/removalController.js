@@ -15,10 +15,8 @@ exports.comment_remove_toggle = (req,res,next) =>{
         .exec(callback);
       }
     }, function(err,results){
-        console.log(results);
         if(err){return next(err);}
         if(!results.comment || !results.subreddit){
-          console.log('not found')
           return res.sendStatus(404);
         }
         let mod = results.subreddit.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id));

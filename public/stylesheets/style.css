@@ -50,3 +50,42 @@ a {
 .comment .voting-arrows{ 
   margin-left: -18px;
 }
+
+.moderator{
+  display:flex;
+  margin: 10px 0 25px;
+}
+
+.new-mod-form, 
+.moderator-new .permission-list,
+.moderator-new .permission{
+  display:flex;
+}
+
+.moderator-new .permission label{
+  margin-bottom: 0;
+}
+
+.moderator-new .permission-list{
+  align-items: center;
+}
+
+.moderator .permission {
+  font-size: 18px;
+  align-items: center;
+}
+
+.moderator .permission input{
+  margin:8px;
+  height: 15px;
+  width: 15px;
+}
+
+.moderator p{
+  justify-content: center;
+  align-self: center;
+  width: 150px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 560;
+}
