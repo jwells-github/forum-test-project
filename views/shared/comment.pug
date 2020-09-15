@@ -23,7 +23,7 @@ div.comment
     if locals.currentUser
       if !comment.is_deleted && !comment.is_removed
         if String(locals.currentUser._id) === String(comment.submitter._id)
-          -let onClickPath = "deleteComment('"+  comment._id + "',this)"
+          -let clickAction = "deleteComment('"+  comment._id + "',this)"
           -let actionName = 'Delete'
           include action_confirmation.pug
 

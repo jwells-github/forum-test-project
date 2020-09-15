@@ -65,11 +65,11 @@ exports.post_remove_toggle = (req,res,next)=>{
             })
           }
           else{
-            return res.sendStatus(404);
+            return res.sendStatus(403);
           }
         }
         else{
-          return res.sendStatus(404);
+          return res.sendStatus(403);
         }
     });
   }

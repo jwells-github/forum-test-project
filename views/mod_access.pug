@@ -19,31 +19,37 @@ block content
             label(for='can_appoint') Can Appoint Moderators
           div.permission
             input(type='checkbox' name='can_ban')
-            label(for='can_appoint') Can Ban Users
+            label(for='can_ban') Can Ban Users
           div.permission
             input(type='checkbox' name='can_edit_sub_details')
-            label(for='can_appoint') Can Edit Subreddit Details
+            label(for='can_edit_sub_details') Can Edit Subreddit Details
           div.permission
-            input(type='checkbox' name='can_edit_sub_details')
-            label(for='can_appoint') Can Remove Posts and Comments
+            input(type='checkbox' name='can_remove')
+            label(for='can_remove') Can Remove Posts and Comments
       button.btn.btn-primary(type='submit') Add new Moderator
 
   h2 List of Moderators
   each moderator in moderators
+    - let mod_name = moderator.user.username
+    if mod_name === locals.currentUser.username
     div.moderator
-      p= moderator.user.username
-      form(method='POST')
+      p= mod_name
+      form( id=mod_name onsubmit="return abc(event,'"+mod_name +"')")
         div.permission-list
           div.permission
             input(type='checkbox' name='can_appoint' checked=moderator.can_appoint)
             label(for='can_appoint') Can Appoint Moderators
           div.permission
             input(type='checkbox' name='can_ban' checked=moderator.can_ban)
-            label(for='can_appoint') Can Ban Users
+            label(for='can_ban') Can Ban Users
           div.permission
             input(type='checkbox' name='can_edit_sub_details' checked=moderator.can_edit_sub_details)
-            label(for='can_appoint') Can Edit Subreddit Details
+            label(for='can_edit_sub_details') Can Edit Subreddit Details
           div.permission
-            input(type='checkbox' name='can_edit_sub_details' checked=moderator.can_edit_sub_details)
-            label(for='can_appoint') Can Remove Posts and Comments
-        button.btn.btn-primary(type='submit') Update Permissions
+            input(type='checkbox' name='can_remove' checked=moderator.can_remove)
+            label(for='can_remove') Can Remove Posts and Comments
+        button.btn.btn-primary(type='submit') Update Permissions  
+        p(id= mod_name + '-error')
+  script
+    include ../public/javascripts/fetchPost.js
+    include ../public/javascripts/modAccess.js
