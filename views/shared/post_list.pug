@@ -3,12 +3,13 @@ if posts
     each post in posts 
       if !post.is_deleted && !post.is_removed
         div.post
-          div.voting-arrows 
-            button(onclick="upvotePost('"+post._id +"',this)") ^
-            span.post-score= post.vote_score
-            button(onclick="downvotePost('"+post._id +"',this)") v
+          if(locals.currentUser)
+            div.voting-arrows 
+              button(onclick="upvotePost('"+post._id +"',this)") ^
+              span.post-score= post.vote_score
+              button(onclick="downvotePost('"+post._id +"',this)") v
           div.post-body
-            - let detailURL = '/r/' + subreddit.name + '/' + post._id
+            - let detailURL = '/r/' + post.subreddit.name + '/' + post._id
             a(href=(post.link ==='' ? detailURL : post.link))= post.title  
             br
             - let commentString = (post.number_of_comments === 1 ? 'comment' : 'comments')
@@ -20,7 +21,9 @@ if posts
                 -let actionName = 'Delete'
                 include action_confirmation.pug
             if is_moderator
-                -let clickAction = "removePostToggle('"+subreddit.name+"', '"+post._id+"', this)"
+                -let clickAction = "removePostToggle('"+post.subreddit.name+"', '"+post._id+"', this)"
                 -let actionName = 'Remove'
                 include action_confirmation.pug
+            if is_front_page
+              a(href='/r/'+post.subreddit.name) from /r/#{post.subreddit.name}
           br

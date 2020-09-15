@@ -22,6 +22,7 @@ exports.subreddit_get = function(req,res,next){
     },
     function getPosts (subreddit,callback){
       Post.find({subreddit: subreddit._id})
+      .populate('subreddit')
       .exec(function(err,posts){
         if(err){return next(err);}
         callback(null,subreddit, posts)
