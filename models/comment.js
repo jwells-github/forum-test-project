@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
+const getAge = require('../public/javascripts/getAge.js');
 const Schema = mongoose.Schema;
-
-
 
 const CommentSchema = new Schema(
     {
@@ -19,5 +18,9 @@ const CommentSchema = new Schema(
         date_last_edited: Date, 
     }
 )
+
+PostSchema.virtual('submission_age').get(function(){
+    return getAge(this.date_created_at);
+});
 
 module.exports = mongoose.model('Comment', CommentSchema);

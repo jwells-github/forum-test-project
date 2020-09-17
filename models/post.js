@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const getAge = require('../public/javascripts/getAge.js');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema(
@@ -21,6 +22,10 @@ const PostSchema = new Schema(
 
 PostSchema.virtual('vote_score').get(function(){
     return this.upvote_count - this.downvote_count;
+});
+
+PostSchema.virtual('submission_age').get(function(){
+    return getAge(this.date_created_at);
 });
 
 module.exports = mongoose.model('Post', PostSchema);
