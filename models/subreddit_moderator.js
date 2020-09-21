@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const SubredditModerator = new Schema(
     {
         user: {type:Schema.Types.ObjectId, ref:'User'},
+        subreddit: {type:Schema.Types.ObjectId, ref:'Subreddit'},
         head_mod: {type: Boolean, default: false},
         appointment_date: {type: Date, default: Date.now},
         can_appoint: {type: Boolean, default: false},

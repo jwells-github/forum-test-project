@@ -81,7 +81,11 @@ exports.subreddit_create_post = [
         });
         subreddit.save(function(err){
           if(err){return next(err);}
-          return res.redirect('/r/'+subreddit.name);
+          subreddit_moderator.subreddit = subreddit._id;
+          subreddit_moderator.save(function(err,){
+            if(err){return next(err);}
+            return res.redirect('/r/'+subreddit.name);
+          })
         })
       })
 

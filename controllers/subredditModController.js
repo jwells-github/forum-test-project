@@ -90,6 +90,7 @@ exports.mod_access_post = [
         }
         var new_mod = new SubredditModerator({
           can_appoint: req.body.can_appoint ? true: false,
+          subreddit: results.subreddit._id,
           can_ban: req.body.can_ban ? true: false,
           can_edit_sub_details: req.body.can_edit_sub_details ? true: false,
           can_remove: req.body.can_remove ? true: false,
