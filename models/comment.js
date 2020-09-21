@@ -19,7 +19,7 @@ const CommentSchema = new Schema(
     }
 )
 
-PostSchema.virtual('submission_age').get(function(){
+CommentSchema.virtual('submission_age').get(function(){
     return getAge(this.date_created_at);
 });
 
