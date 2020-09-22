@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const CommentDownvoteSchema = new Schema(
     {
-        comment:{type:Schema.Types.ObjectId, ref:'Comment'},
-        submitter: {type:Schema.Types.ObjectId, ref:'User'},
+        content:{type:Schema.Types.ObjectId, ref:'Comment', required: true},
+        submitter: {type:Schema.Types.ObjectId, ref:'User', required: true},
         date_created_at: {type: Date, default: Date.now},
     }
 )

@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const PostUpvoteSchema = new Schema(
     {
-        post:{type:Schema.Types.ObjectId, ref:'Post'},
-        submitter: {type:Schema.Types.ObjectId, ref:'User'},
+        content:{type:Schema.Types.ObjectId, ref:'Post',required: true},
+        submitter: {type:Schema.Types.ObjectId, ref:'User',required: true},
         date_created_at: {type: Date, default: Date.now},
     }
 )
