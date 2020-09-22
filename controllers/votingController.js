@@ -19,10 +19,10 @@ exports.comment_vote = (req,res,next) => {
           Comment.findById(req.params.commentID).exec(callback);
         },
         existing_upvote: function(callback){
-          CommentUpvote.findOne({comment: req.params.commentID, submitter: res.locals.currentUser._id}).exec(callback);
+          CommentUpvote.findOne({content: req.params.commentID, submitter: res.locals.currentUser._id}).exec(callback);
         },
         existing_downvote: function(callback){
-          CommentDownvote.findOne({comment: req.params.commentID, submitter: res.locals.currentUser._id}).exec(callback);
+          CommentDownvote.findOne({content: req.params.commentID, submitter: res.locals.currentUser._id}).exec(callback);
         }
       }, function(err,results){
         if(err){return next(err);}
@@ -54,7 +54,7 @@ exports.comment_vote = (req,res,next) => {
           else{
             comment_vote = new CommentUpvote();
           }
-          comment_vote.comment = req.params.commentID;
+          comment_vote.content = req.params.commentID;
           comment_vote.submitter = res.locals.currentUser._id;
           comment_vote.save(function(err){
             if(err){return next(err);}
@@ -112,10 +112,10 @@ exports.post_vote = (req,res,next) =>{
           Post.findById(req.params.postID).exec(callback);
         },
         existing_upvote: function(callback){
-          PostUpvote.findOne({post: req.params.postID, submitter: res.locals.currentUser._id}).exec(callback);
+          PostUpvote.findOne({content: req.params.postID, submitter: res.locals.currentUser._id}).exec(callback);
         },
         existing_downvote: function(callback){
-          PostDownvote.findOne({post: req.params.postID, submitter: res.locals.currentUser._id}).exec(callback);
+          PostDownvote.findOne({content: req.params.postID, submitter: res.locals.currentUser._id}).exec(callback);
         }
       }, function(err,results){
         if(err){return next (err);}
@@ -147,7 +147,7 @@ exports.post_vote = (req,res,next) =>{
           else{
             post_vote = new PostUpvote();
           }
-          post_vote.post = req.params.postID;
+          post_vote.content = req.params.postID;
           post_vote.submitter = res.locals.currentUser._id;
           post_vote.save(function(err){
             if(err){return next(err);}

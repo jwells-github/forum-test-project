@@ -1,8 +1,8 @@
 div.comment
-  if !comment.is_deleted && !comment.is_removed
+  if !comment.is_deleted && !comment.is_removed && locals.currentUser
     div.voting-arrows 
-        button(onclick="upvoteComment('"+comment._id +"',this)") ^
-        button(onclick="downvoteComment('"+comment._id +"',this)") v
+        button(onclick="upvoteComment('"+comment._id +"',this)" class=(comment.user_vote === 1 ? 'upvote' : '')) ^
+        button(onclick="downvoteComment('"+comment._id +"',this)" class=(comment.user_vote === -1 ? 'downvote' : '')) v
   div.comment-body
     if !comment.is_removed
       p= (comment.is_deleted ? 'Deleted' : comment.text)

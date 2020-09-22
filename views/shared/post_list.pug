@@ -5,9 +5,9 @@ if posts
         div.post
           if(locals.currentUser)
             div.voting-arrows 
-              button(onclick="upvotePost('"+post._id +"',this)") ^
+              button(onclick="upvotePost('"+post._id +"',this)" class=(post.user_vote === 1 ? 'upvote' : '')) ^
               span.post-score= post.vote_score
-              button(onclick="downvotePost('"+post._id +"',this)") v
+              button(onclick="downvotePost('"+post._id +"',this)" class=(post.user_vote === -1 ? 'downvote' : '')) v
           div.post-body
             - let detailURL = '/r/' + post.subreddit.name + '/' + post._id
             a(href=(post.link ==='' ? detailURL : post.link))= post.title  

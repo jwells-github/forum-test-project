@@ -3,41 +3,70 @@ const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const Post = require("../models/post");
 const Comment = require("../models/comment");
-
+const PostUpvote = require("../models/votes/post_upvote");
+const PostDownvote = require("../models/votes/post_downvote");
+const CommentUpvote = require("../models/votes/comment_upvote");
+const CommentDownvote = require("../models/votes/comment_downvote");
+const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
 exports.post_get = function(req,res,next){
-  async.waterfall([
-    function getPost (callback){
-      Post.findById(req.params.postID)
-      .populate({
-        path:'subreddit',
-        populate: {
-          path: 'moderators'
-        }
-      })
-      .exec(function(err,post){
-        if(err){return next(err);}
-        if(!post){
-          var err = new Error('Post not found');
-          err.status = 404;
-          return next(err);
-        }
-        callback(null,post);
-      });
-    },
-    function getComments(post, callback){
-      Comment.find({post: post._id})
-      .populate('sub_comments')
-      .populate('submitter')
-      .exec(function(err,comments){
-        if(err){return next(err);}
-        callback(null, post, comments);
-      });
+  Post.findById(req.params.postID)
+  .populate({
+    path:'subreddit',
+    populate: {
+      path: 'moderators'
     }
-  ], function(err, post, comments){
+  })
+  .exec(function(err,post){
     if(err){return next(err);}
-  
-    res.render('post_detail', {title: post.title, post: post, comments:comments});
+    if(!post){
+      var err = new Error('Post not found');
+      err.status = 404;
+      return next(err);
+    }
+    async.parallel({
+      comments:function(callback){
+        Comment.find({post: post._id})
+        .populate('sub_comments')
+        .populate('submitter')
+        .exec(callback);
+      },
+      post_liked: function(callback){
+        if(res.locals.currentUser){
+          PostUpvote.find({post: post._id, submitter: res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{ callback(null,false)}
+      },
+      post_disliked: function(callback){
+        if(res.locals.currentUser){
+          PostDownvote.find({post: post._id, submitter: res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{ callback(null,false)}
+      },
+      comment_upvotes: function(callback){
+        if(res.locals.currentUser){
+          CommentUpvote.find({submitter: res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{ callback(null,[])}
+      },
+      comment_downvotes: function(callback){
+        if(res.locals.currentUser){
+          CommentDownvote.find({submitter: res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{ callback(null,[])}
+      }
+    }, function(err, results){
+      if(err){return next(err);}
+      let comments= results.comments;
+      if(res.locals.currentUser){
+        comments = getUserVotes(results.comments, results.comment_upvotes, results.comment_downvotes);
+      }
+      res.render('post_detail', {title: post.title, post: post, comments:comments});
+    })
   })
 }
 
