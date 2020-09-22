@@ -1,7 +1,8 @@
 function upvotePost(postID, element){
   fetchPost('../../vote/post/'+postID+'/1').then(response =>{
     if(response.status === 200){
-      console.log('success')
+      element.nextSibling.nextSibling.classList.remove('downvote');
+      toggleClass(element, 'upvote');
     }
     else{
       console.log('fail')
@@ -12,7 +13,8 @@ function upvotePost(postID, element){
 function downvotePost(postID, element){
   fetchPost('../../vote/post/'+postID+'/0').then(response =>{
     if(response.status === 200){
-      console.log('success')
+      element.previousSibling.previousSibling.classList.remove('upvote');
+      toggleClass(element, 'downvote');
     }
     else{
       console.log('fail')
