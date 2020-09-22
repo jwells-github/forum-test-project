@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema(
     {
+        subreddit: {type:Schema.Types.ObjectId, ref:'Subreddit'},
         post:{type:Schema.Types.ObjectId, ref:'Post'},
         text:{type:String, requried:true, maxlength: 10000},
         submitter: {type:Schema.Types.ObjectId, ref:'User'},

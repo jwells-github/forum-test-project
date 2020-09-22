@@ -78,6 +78,7 @@ exports.post_comment_post = [
       Post.findById(req.params.postID).exec(function(err,post){
         if(err){return next(err);}
         var comment = new Comment({
+          subreddit: post.subreddit,
           post: post._id,
           text:req.body.text,
           submitter:res.locals.currentUser,
