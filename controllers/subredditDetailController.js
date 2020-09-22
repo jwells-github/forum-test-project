@@ -4,33 +4,48 @@ const async = require("async");
 
 const Subreddit = require('../models/subreddit');
 const Post = require('../models/post');
+const PostUpvote = require("../models/votes/post_upvote");
+const PostDownvote = require("../models/votes/post_downvote");
+const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
 exports.subreddit_get = function(req,res,next){
-  async.waterfall([
-    function getSubreddit (callback){
-      Subreddit.findOne({name: req.params.subredditName})
-      .populate('moderators')
-      .exec(function(err,subreddit){
-        if(err){return next(err);}
-        if(!subreddit){
-          var err = new Error('Subreddit not found');
-          err.status = 404;
-          return next(err);
-        }
-        callback(null,subreddit);
-      });
-    },
-    function getPosts (subreddit,callback){
-      Post.find({subreddit: subreddit._id})
-      .populate('subreddit')
-      .exec(function(err,posts){
-        if(err){return next(err);}
-        callback(null,subreddit, posts)
-      });
-    },
-  ], function(err, subreddit,posts){
+  Subreddit.findOne({name: req.params.subredditName})
+  .populate('moderators')
+  .exec(function(err,subreddit){
     if(err){return next(err);}
-    res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit, posts:posts})
+    if(!subreddit){
+      var err = new Error('Subreddit not found');
+      err.status = 404;
+      return next(err);
+    }
+    async.parallel({
+      posts:function(callback){
+        Post.find({subreddit:subreddit._id})
+        .populate('subreddit')
+        .exec(callback)
+      },
+      post_upvotes: function(callback){
+        if(res.locals.currentUser){
+          PostUpvote.find({submitter:res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{callback(null,[])}
+      },
+      post_downvotes: function(callback){
+        if(res.locals.currentUser){
+          PostDownvote.find({submitter:res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{callback(null,[])}
+      }
+    }, function(err,results){
+      if(err){return next(err);}
+      let posts = results.posts;
+      if(res.locals.currentUser){
+        posts = getUserVotes(results.posts, results.post_upvotes, results.post_downvotes);
+      }
+      res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit, posts:posts})
+    })
   })
 }
 
