@@ -55,7 +55,7 @@ app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/subreddits', subredditRouter);
 app.use('/r',subredditDetailRouter); 
-app.use('/users', usersRouter);
+app.use('/u', usersRouter);
 
 app.get('/logout', function(req, res){
   req.logout();

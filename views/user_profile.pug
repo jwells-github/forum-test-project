@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  if locals.currentUser
+    p YOU ARE LOGGED IN
+    a(href="/subreddits/create") create sub
+  each submission in submission_history
+    div.submission
+      if submission.title
+        - let post = submission
+        if locals.currentUser
+            div.voting-arrows 
+              button(onclick="upvotePost('"+post._id +"',this)" class=(post.user_vote === 1 ? 'upvote' : '')) ^
+              span.post-score= post.vote_score
+              button(onclick="downvotePost('"+post._id +"',this)" class=(post.user_vote === -1 ? 'downvote' : '')) v
+        p=post.title
+        p=post.submission_age
+      else
+        - let comment = submission
+        if locals.currentUser
+          div.voting-arrows 
+            button(onclick="upvoteComment('"+comment._id +"',this)" class=(comment.user_vote === 1 ? 'upvote' : '')) ^
+            button(onclick="downvoteComment('"+comment._id +"',this)" class=(comment.user_vote === -1 ? 'downvote' : '')) v
+        p=comment.post.title
+        p=comment.text
+
+  script
+    include ../public/javascripts/postVote.js
+    include ../public/javascripts/postDelete.js
+    include ../public/javascripts/postRemoval.js
+    include ../public/javascripts/commentVote.js
+    include ../public/javascripts/toggleActionConfirmation.js
+    include ../public/javascripts/fetchPost.js
