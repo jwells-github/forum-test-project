@@ -5,6 +5,8 @@ const async = require("async");
 const Subreddit = require('../models/subreddit');
 const User = require('../models/user');
 const SubredditModerator = require('../models/subreddit_moderator');
+const Comment =  require('../models/comment');
+const Post = require('../models/post');
 
 exports.mod_access_get = function(req,res,next){
   if(res.locals.currentUser){
@@ -115,11 +117,59 @@ exports.mod_access_post = [
 ]
 
 exports.removed_list_get = function(req,res,next){
-
+  if(res.locals.currentUser){
+    Subreddit.findOne({name:req.params.subredditName})
+    .populate({
+      path:'moderators',
+        populate: {
+          path: 'user'
+        }
+    })
+    .exec(function(err,subreddit){
+      if(err){return next(err);}
+      if(!subreddit){
+        let err = new Error('Subreddit not found');
+        err.status = 404;
+        return next(err);
+      } 
+      let mod = subreddit.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+      if(mod){
+        async.parallel({
+          removed_posts: function(callback){
+            Post.find({subreddit:subreddit._id, is_removed: true})
+            .populate('subreddit')
+            .exec(callback);
+          },
+          removed_comments: function(callback){
+            Comment.find({subreddit:subreddit._id, is_removed: true})
+            .populate({
+              path:'post',
+                populate: {
+                  path:'subreddit'
+                }
+            })
+            .exec(callback);
+          }
+        },function(err,results){
+          if(err){return next(err);}
+          let removed_content = results.removed_posts.concat(results.removed_comments);
+          removed_content.sort(function(a,b){ 
+            return b.date_created_at - a.date_created_at;
+          });
+          res.render('subreddit_removed_content', {title: subreddit.name + ' Removed', removed_content: removed_content});
+        })
+      }
+      else{
+        res.redirect('/');
+      }
+    })
+  }
+  else{
+    res.redirect('/');
+  }
 }
 
 exports.mod_permissions_post = (req,res,next) =>{
-  console.log(req.body);
   if(res.locals.currentUser){
     async.parallel({
       subreddit: function(callback){

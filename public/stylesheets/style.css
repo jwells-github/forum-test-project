@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -7,12 +7,44 @@ a {
   color: #00B7FF;
 }
 
+.upvote{
+  background: orange;
+}
+
+.downvote{
+  background: plum;
+}
+.home-button{
+  padding-left: 4px;
+  text-align: center;
+}
+.home-button a{
+  font-size: 40px;
+}
+
+.page-title h1{
+  font-size:14px;
+}
+
+.header ul{
+  padding: 0;
+}
+
+.header li:first-child{
+  padding-left:0;
+}
+
+.header li{
+  display:inline;
+  padding: 5px;
+}
+
 
 .post-list{
   padding-left:20px;
 }
 
-.post{
+.post, .submission{
   display:flex;
   height:100px
 }
@@ -26,6 +58,7 @@ a {
   padding: 8px;
   font-weight: 600;
   font-size: 20px;
+  width:55px
 }
 
 .comment-chain {
@@ -45,6 +78,11 @@ a {
 .voting-arrows{
   display:flex;
   flex-direction: column;
+}
+
+.voting-arrows button{
+  align-self: center;
+  width:30px;
 }
 
 .comment .voting-arrows{ 

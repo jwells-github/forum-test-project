@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  if locals.currentUser
+    p YOU ARE LOGGED IN
+    a(href="/subreddits/create") create sub
+  each content in removed_content
+    div.submission
+      if content.title
+        - let post = content
+        p=post.title
+        p=post.submission_age
+        -let clickAction = "removePostToggle('"+post.subreddit.name+"', '"+post._id+"', this)"
+        -let actionName = 'Reinstate Post'
+        include shared/action_confirmation.pug
+      else
+        - let comment = contenT
+        p=comment.post.title
+        p=comment.text
+        -let clickAction = "removeCommentToggle('"+comment.post.subreddit.name+"', '"+comment._id+"', this)"
+        -let actionName = 'Reinstate Comment'
+        include shared/action_confirmation.pug
+
+  script
+    include ../public/javascripts/postVote.js
+    include ../public/javascripts/postDelete.js
+    include ../public/javascripts/postRemoval.js
+    include ../public/javascripts/commentVote.js
+    include ../public/javascripts/toggleActionConfirmation.js
+    include ../public/javascripts/fetchPost.js
