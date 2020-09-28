@@ -10,6 +10,10 @@ router.get('/:subredditName/mod_access', subredditModController.mod_access_get);
 
 router.post('/:subredditName/mod_access', subredditModController.mod_access_post);
 
+router.post('/:subredditName/mod_access/ban/:username', subredditModController.mod_access_ban);
+
+router.post('/:subredditName/mod_access/unban/:username', subredditModController.mod_access_unban);
+
 router.post('/:subredditName/mod_access/mod_permissions', subredditModController.mod_permissions_post)
 
 router.get('/:subredditName/removed', subredditModController.removed_list_get);

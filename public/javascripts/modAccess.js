@@ -22,3 +22,38 @@ function changeModPermissions(event,modName){
   })
   return false;
 }
+
+function banForm(event){
+  event.preventDefault();
+  let form = document.getElementById('ban_form');
+  let user_to_ban = form.querySelector("input[name='username']").value;
+  console.log(user_to_ban);
+  banUser(user_to_ban);
+  return false;
+}
+
+function banUser(user_to_ban){
+  fetchPost('./mod_access/ban/'+user_to_ban).then(response =>{
+    if(response.status = 200){
+      console.log('good')
+    }
+    else{
+      response.json().then(message =>{
+        console.log('bad');        
+      })
+    }
+  })
+}
+
+function unbanUser(username){
+  fetchPost('./mod_access/unban/'+username).then(response =>{
+    if(response.status = 200){
+      console.log('good')
+    }
+    else{
+      response.json().then(message =>{
+        console.log('bad');        
+      })
+    }
+  })
+}

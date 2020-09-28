@@ -4,21 +4,32 @@ const async = require("async");
 
 const Subreddit = require('../models/subreddit');
 const User = require('../models/user');
+const SubredditBan = require('../models/subreddit_ban');
 const SubredditModerator = require('../models/subreddit_moderator');
 const Comment =  require('../models/comment');
 const Post = require('../models/post');
 
 exports.mod_access_get = function(req,res,next){
   if(res.locals.currentUser){
-    Subreddit.findOne({name: req.params.subredditName})
-    .populate({
-      path:'moderators',
-        populate: {
-          path: 'user'
-        }
-    })
-    .exec(function(err,subreddit){
+    async.parallel({
+      subreddit: function(callback){
+        Subreddit.findOne({name: req.params.subredditName})
+        .populate({
+          path:'moderators',
+            populate: {
+              path: 'user'
+            }
+        })
+        .exec(callback);
+      },
+      banned_users: function(callback){
+        SubredditBan.find({subreddit_name: req.params.subredditName})
+        .populate('banned_user')
+        .exec(callback);
+      }
+    },function(err,results){
       if(err){return next(err);}
+      let subreddit = results.subreddit;  
       if(!subreddit){
         let err = new Error('Subreddit not found');
         err.status = 404;
@@ -26,7 +37,12 @@ exports.mod_access_get = function(req,res,next){
       } 
       let mod = subreddit.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
       if(mod){
-        res.render('mod_access',{title: subreddit.title, subreddit:subreddit, moderators: subreddit.moderators});
+        res.render('mod_access',{
+          title: subreddit.title, 
+          subreddit:subreddit, 
+          moderators: subreddit.moderators,
+          banned_users: results.banned_users
+        });
       }
       else{
         res.redirect('/');
@@ -115,6 +131,112 @@ exports.mod_access_post = [
     }
   }
 ]
+
+exports.mod_access_ban = (req,res,next) =>{
+  if(res.locals.currentUser){
+    async.parallel({
+      subreddit: function(callback){
+        Subreddit.findOne({name:req.params.subredditName})
+        .populate({
+          path: 'moderators',
+            populate: {
+              path: 'user'
+            }
+        })
+        .exec(callback);
+      },
+      user_to_ban: function(callback){
+        User.findOne({username:req.params.username})
+        .exec(callback);
+      },
+    }, function(err,results){
+      if(err){return next(err);}
+      if(!results.subreddit){
+        return res.status(404).send({error:'Subreddit not found'});
+      } 
+      if(!results.user_to_ban){
+        return res.status(404).send({error:'User not found'});
+      }
+      SubredditBan.findOne({banned_user: results.user_to_ban._id,subreddit:results.subreddit._id})
+      .exec(function(err,banned_user){
+        if(err){return next(err);}
+        if(banned_user){
+          return res.status(401).send({error:'User Already Banned'});
+        }
+        else{
+          let mod = results.subreddit.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+          if(mod){
+            let user_to_ban_is_mod = results.subreddit.moderators.find(moderator => String(moderator.user._id) === String(results.user_to_ban._id))
+            if(user_to_ban_is_mod){
+              return res.status(401).send({error:'Cannot ban a moderator'});
+            }
+            else{
+              let subreddit_ban = new SubredditBan({
+                banned_user: results.user_to_ban._id,
+                subreddit: results.subreddit._id,
+                subreddit_name: results.subreddit.name
+              })
+              subreddit_ban.save(function(err){
+                if(err){return next(err);}
+                return res.sendStatus(200);
+              }) 
+            }
+          }
+          else{
+            return res.status(401).send({error:'Invalid Permissions'});
+          } 
+        }
+      })
+    })
+  }
+  else{
+    return res.status(401).send({error:'Invalid Permissions'});
+  }
+}
+
+exports.mod_access_unban = (req,res,next) =>{
+  if(res.locals.currentUser){
+    async.parallel({
+      subreddit: function(callback){
+        Subreddit.findOne({name:req.params.subredditName})
+        .populate({
+          path: 'moderators',
+            populate: {
+              path: 'user'
+            }
+        })
+        .exec(callback);
+      },
+      user_to_unban: function(callback){
+        User.findOne({username:req.params.username})
+        .exec(callback);
+      },
+    }, function(err,results){
+      if(err){return next(err);}
+      if(!results.subreddit){
+        return res.status(404).send({error:'Subreddit not found'});
+      } 
+
+      if(!results.user_to_unban){
+        return res.status(404).send({error:'User not found'});
+      }
+      let mod = results.subreddit.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+      if(mod){
+        SubredditBan.deleteOne({subreddit:results.subreddit._id, banned_user: results.user_to_unban._id})
+        .exec(function(err){
+          if(err){return next(err);}
+          return res.sendStatus(200);
+        })
+      }
+      else{
+        return res.status(401).send({error:'Invalid Permissions'});
+      }
+    })
+  }
+  else{
+    return res.status(401).send({error:'Invalid Permissions'});
+  }
+}
 
 exports.removed_list_get = function(req,res,next){
   if(res.locals.currentUser){
@@ -230,3 +352,4 @@ exports.mod_permissions_post = (req,res,next) =>{
     return res.status(403).send({error:'You have invalid permissions'});
   }
 }
+

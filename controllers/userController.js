@@ -30,7 +30,8 @@ exports.profile_get = (req,res,next) =>{
               populate: {
                 path:'subreddit'
               }
-        }).exec(callback);
+          })
+        .exec(callback);
       },
       comment_upvotes: function(callback){
         if(res.locals.currentUser){
