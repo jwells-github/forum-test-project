@@ -5,7 +5,8 @@ block content
   
   h1= title
   p Welcome to #{title}
-
+  h2 Ban a User
+  form(method='POST' action='/ban')
   h2 Add a Moderator
   div.moderator.moderator-new
     form(method='POST')
@@ -34,7 +35,7 @@ block content
     if mod_name === locals.currentUser.username
     div.moderator
       p= mod_name
-      form( id=mod_name onsubmit="return abc(event,'"+mod_name +"')")
+      form( id=mod_name onsubmit="return changeModPermissions(event,'"+mod_name +"')")
         div.permission-list
           div.permission
             input(type='checkbox' name='can_appoint' checked=moderator.can_appoint)

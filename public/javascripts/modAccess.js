@@ -1,4 +1,4 @@
-function abc(event,modName){
+function changeModPermissions(event,modName){
   event.preventDefault();
   let form = document.getElementById(modName);
   let data = {
