@@ -15,14 +15,6 @@ exports.user_create_get = function(req,res,next){
 
 exports.user_create_post = [
   sanitizeBody('*').trim(),
-  body('email', 'A valid email address is required').isEmail().normalizeEmail()
-    .custom(value =>{
-      return User.findOne({'email': value}).then(user =>{
-        if(user){
-          return Promise.reject('Email in use');
-        }
-      });
-    }),
   body('username', 'Usernames must be longer than 2 characters and may only contains Numbers, English characters and underscores')
     .isLength({min:3})
     .custom(value =>{
@@ -55,7 +47,6 @@ exports.user_create_post = [
         if(err){return next(err)}
         
         var user = new User({
-          email: req.body.email,
           username: req.body.username,
           password: hashedPassword,
         });
