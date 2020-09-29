@@ -62,6 +62,20 @@ a {
   margin: 0 10px;
 }
 
+.post-title{
+  display:block;
+  font-size:32px;
+}
+
+.post-actions{
+  display:block;
+}
+
+.post-actions form{
+  display: inline;
+  padding-left: 6px;
+}
+
 .post-score{
   text-align: center;
   padding: 8px;
