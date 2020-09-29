@@ -1,21 +1,21 @@
 const {body} = require('express-validator');
-const Subreddit = require('../models/subreddit');
+const SubForum = require('../models/subForum');
 
-exports.subreddit_search_get = function(req,res){
+exports.subForum_search_get = function(req,res){
   let matchRegex = new RegExp("("+req.query.searchterm+")");
-  Subreddit.find(
+  SubForum.find(
     { $or:[
         {name:{$regex: matchRegex}}, 
         {description:{$regex: matchRegex}}, 
         {sidebar:{$regex: matchRegex}}
     ]})
-  .exec(function(err,subreddits){
+  .exec(function(err,subForums){
     if(err){return next(err);}
-    res.render('search_results',{title:req.query.searchterm, subreddits:subreddits});
+    res.render('search_results',{title:req.query.searchterm, subForums:subForums});
   })
 }
 
-exports.subreddit_search_post = [
+exports.subForum_search_post = [
   body('search').trim().escape(),
   (req,res,next) => {
       res.redirect('/search?searchterm=' + req.body.search);

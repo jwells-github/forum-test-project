@@ -5,18 +5,18 @@ html
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/subreddit.css')
+    link(rel='stylesheet', href='/stylesheets/subForum.css')
   body
     div.header.container-fluid
       div.row
         div.col-auto.home-button
-          a(href='/') Reddit<br/>Clone
+          a(href='/') Forum<br/>Clone
         div.col
-          div.row.subreddit-shortcuts
+          div.row.subForum-shortcuts
             div.col
               ul
                 li
-                  span MY SUBREDDITS
+                  span MY SUBForumS
                 li
                   a(href='/') HOME
                 li
@@ -26,9 +26,9 @@ html
                 li
                   span |
                 li
-                  a Subreddit1
+                  a SubForum1
                 li
-                  a Subreddit2
+                  a SubForum2
                 li
                   a Sub3
                 li
@@ -37,11 +37,11 @@ html
                   a Sub5                      
           div.row
             div.col.page-title
-              h1=(subreddit?subreddit.name:'All')
-            div.col-auto.subreddit-search
+              h1=(subForum?subForum.name:'All')
+            div.col-auto.subForum-search
               form(method='POST' action='/search')
                 div.searchbar
-                  label(for='search') Find a Subreddit:
+                  label(for='search') Find a SubForum:
                   input#search(type='text' name='search' required='true')
                 button(type='submit') Submit  
           div.row

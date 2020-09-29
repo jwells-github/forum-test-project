@@ -3,14 +3,14 @@ extends layout
 block content
   - let is_moderator = false;
   if locals.currentUser
-    - let mod = subreddit.moderators.find(moderator => String(moderator.user) === String(locals.currentUser._id))
+    - let mod = subForum.moderators.find(moderator => String(moderator.user) === String(locals.currentUser._id))
     if mod
       - is_moderator = true;
   h1= title
-  h1= subreddit.name
-  a(href= subreddit.name+'/submit/link') Submit a link
+  h1= subForum.name
+  a(href= subForum.name+'/submit/link') Submit a link
   br
-  a(href= subreddit.name+'/submit/text') Submit a text post
+  a(href= subForum.name+'/submit/text') Submit a text post
   br
   br
   include shared/post_list.pug

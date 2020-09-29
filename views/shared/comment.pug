@@ -14,7 +14,7 @@ div.comment
         p= (comment.is_deleted ? 'Deleted' : comment.text)
         p= (comment.is_deleted ? 'Deleted' : comment.submitter.username)
         p= comment._id
-        -let clickAction = "removeCommentToggle('"+post.subreddit.name+"', '"+comment._id+"', this)"
+        -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
         -let actionName = 'Reinstate Comment'
         include action_confirmation.pug
       else
@@ -28,7 +28,7 @@ div.comment
           include action_confirmation.pug
 
         if is_moderator
-          -let clickAction = "removeCommentToggle('"+post.subreddit.name+"', '"+comment._id+"', this)"
+          -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
           -let actionName = 'Remove'
           include action_confirmation.pug
         form(method='POST')

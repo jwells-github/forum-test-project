@@ -21,14 +21,14 @@ exports.profile_get = (req,res,next) =>{
     } 
     async.parallel({
       posts: function(callback){
-        Post.find({submitter: user._id}).populate('subreddit').exec(callback);
+        Post.find({submitter: user._id}).populate('subForum').exec(callback);
       },
       comments: function(callback){
         Comment.find({submitter: user._id})
           .populate({
             path:'post',
               populate: {
-                path:'subreddit'
+                path:'SubForum'
               }
           })
         .exec(callback);

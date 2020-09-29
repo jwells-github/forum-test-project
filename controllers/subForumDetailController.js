@@ -2,26 +2,26 @@ const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const async = require("async");
 
-const Subreddit = require('../models/subreddit');
+const SubForum = require('../models/subForum');
 const Post = require('../models/post');
 const PostUpvote = require("../models/votes/post_upvote");
 const PostDownvote = require("../models/votes/post_downvote");
 const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
-exports.subreddit_get = function(req,res,next){
-  Subreddit.findOne({name: req.params.subredditName})
+exports.subForum_get = function(req,res,next){
+  SubForum.findOne({name: req.params.subForumName})
   .populate('moderators')
-  .exec(function(err,subreddit){
+  .exec(function(err,subForum){
     if(err){return next(err);}
-    if(!subreddit){
-      var err = new Error('Subreddit not found');
+    if(!subForum){
+      var err = new Error('SubForum not found');
       err.status = 404;
       return next(err);
     }
     async.parallel({
       posts:function(callback){
-        Post.find({subreddit:subreddit._id})
-        .populate('subreddit')
+        Post.find({subForum:subForum._id})
+        .populate('subForum')
         .exec(callback)
       },
       post_upvotes: function(callback){
@@ -44,23 +44,23 @@ exports.subreddit_get = function(req,res,next){
       if(res.locals.currentUser){
         posts = getUserVotes(results.posts, results.post_upvotes, results.post_downvotes);
       }
-      res.render('subreddit_detail', {title: subreddit.title, subreddit:subreddit, posts:posts})
+      res.render('subForum_detail', {title: subForum.title, subForum:subForum, posts:posts})
     })
   })
 }
 
-exports.subreddit_text_form_get = function(req,res,next){
+exports.subForum_text_form_get = function(req,res,next){
   if(res.locals.currentUser){
-    Subreddit.findOne({name: req.params.subredditName})
-    .exec(function(err,subreddit){
+    SubForum.findOne({name: req.params.subForumName})
+    .exec(function(err,subForum){
       if(err){return next(err);}
-      if(!subreddit){
-        var err = new Error('Subreddit not found');
+      if(!subForum){
+        var err = new Error('SubForum not found');
         err.status = 404;
         return next(err);
       }
       else{
-        res.render('subreddit_text_post_create', {title: subreddit.title, subreddit:subreddit});
+        res.render('subForum_text_post_create', {title: subForum.title, subForum:subForum});
       }
     });
   }
@@ -69,18 +69,18 @@ exports.subreddit_text_form_get = function(req,res,next){
   }
 }
 
-exports.subreddit_link_form_get = function(req,res,next){
+exports.subForum_link_form_get = function(req,res,next){
   if(res.locals.currentUser){
-    Subreddit.findOne({name: req.params.subredditName})
-    .exec(function(err,subreddit){
+    SubForum.findOne({name: req.params.subForumName})
+    .exec(function(err,subForum){
       if(err){return next(err);}
-      if(!subreddit){
-        var err = new Error('Subreddit not found');
+      if(!subForum){
+        var err = new Error('SubForum not found');
         err.status = 404;
         return next(err);
       }
       else{
-        res.render('subreddit_link_post_create', {title: subreddit.title, subreddit:subreddit});
+        res.render('subForum_link_post_create', {title: subForum.title, subForum:subForum});
       }
     });
   }
@@ -89,7 +89,7 @@ exports.subreddit_link_form_get = function(req,res,next){
   }
 }
 
-exports.subreddit_post =[
+exports.subForum_post =[
   sanitizeBody('*').trim(),
   body('title', 'Posts require a title').escape().isLength({min:1}),
   body('link', 'Please enter a valid url').custom(value =>{
@@ -109,20 +109,20 @@ exports.subreddit_post =[
       console.log(errors);
       if(req.body.link){
         console.log('going to link post')
-        res.render('subreddit_link_post_create', {title: 'Submit a post', errors: errors.array(), post: req.body});
+        res.render('subForum_link_post_create', {title: 'Submit a post', errors: errors.array(), post: req.body});
       }
       else{
         console.log('going to text post')
-        res.render('subreddit_text_post_create', {title: 'Submit a post', errors: errors.array(), subreddit: req.body});
+        res.render('subForum_text_post_create', {title: 'Submit a post', errors: errors.array(), subForum: req.body});
       }
       return; 
     }
     else{
-      Subreddit.findOne({name: req.params.subredditName})
-      .exec(function(err,subreddit){
+      SubForum.findOne({name: req.params.subForumName})
+      .exec(function(err,subForum){
         if(err){return next(err);}
-        if(!subreddit){
-          var err = new Error('Subreddit not found');
+        if(!subForum){
+          var err = new Error('SubForum not found');
           err.status = 404;
           return next(err);
         }
@@ -132,11 +132,11 @@ exports.subreddit_post =[
             text: req.body.text,
             link: req.body.link,
             submitter: res.locals.currentUser,
-            subreddit: subreddit._id,
+            subForum: subForum._id,
           });
           post.save(function(err){
             if(err){return next(err);}
-            return res.redirect('/r/'+subreddit.name+'/'+post._id);
+            return res.redirect('/r/'+subForum.name+'/'+post._id);
           })
         }
       });

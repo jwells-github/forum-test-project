@@ -9,7 +9,7 @@ if posts
               span.post-score= post.vote_score
               button(onclick="downvotePost('"+post._id +"',this)" class=(post.user_vote === -1 ? 'downvote' : '')) v
           div.post-body
-            - let detailURL = '/r/' + post.subreddit.name + '/' + post._id
+            - let detailURL = '/r/' + post.subForum.name + '/' + post._id
             a(href=(post.link ==='' ? detailURL : post.link))= post.title  
             br
             - let commentString = (post.number_of_comments === 1 ? 'comment' : 'comments')
@@ -21,9 +21,9 @@ if posts
                 -let actionName = 'Delete'
                 include action_confirmation.pug
             if is_moderator
-                -let clickAction = "removePostToggle('"+post.subreddit.name+"', '"+post._id+"', this)"
+                -let clickAction = "removePostToggle('"+post.subForum.name+"', '"+post._id+"', this)"
                 -let actionName = 'Remove'
                 include action_confirmation.pug
             if is_front_page
-              a(href='/r/'+post.subreddit.name) from /r/#{post.subreddit.name}
+              a(href='/r/'+post.subForum.name) from /r/#{post.subForum.name}
           br

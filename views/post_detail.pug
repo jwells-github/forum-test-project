@@ -3,7 +3,7 @@ extends layout
 block content
   - let is_moderator = false;
   if locals.currentUser
-    - let mod = post.subreddit.moderators.find(moderator => String(moderator.user) === String(locals.currentUser._id))
+    - let mod = post.subForum.moderators.find(moderator => String(moderator.user) === String(locals.currentUser._id))
     if mod
       - is_moderator = true;
   h1= title

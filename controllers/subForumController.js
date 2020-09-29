@@ -1,25 +1,25 @@
-const Subreddit = require('../models/subreddit');
-const SubredditModerator = require('../models/subreddit_moderator');
+const SubForum = require('../models/subForum');
+const SubForumModerator = require('../models/subForum_moderator');
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 
-exports.subreddit_create_get = function(req,res,next){
+exports.subForum_create_get = function(req,res,next){
   if(res.locals.currentUser){
-    res.render('subreddit_create_form', {title: 'Create a Subreddit'});
+    res.render('subForum_create_form', {title: 'Create a SubForum'});
   }
   else{
     res.redirect('/');
   }
 }
 
-exports.subreddit_create_post = [
+exports.subForum_create_post = [
   sanitizeBody('*').trim(),
   body('name', 'Names must be longer than 2 characters and may only contain Numbers and English characters')
     .isLength({min:2})
     .custom(value =>{
-      return Subreddit.findOne({'name':value}).then(subreddit =>{
-        if(subreddit){
-          return Promise.reject('A Subreddit with this name already exists')
+      return SubForum.findOne({'name':value}).then(subForum =>{
+        if(subForum){
+          return Promise.reject('A SubForum with this name already exists')
         }
       }); 
     })
@@ -40,11 +40,11 @@ exports.subreddit_create_post = [
     const errors = validationResult(req);
     if(!errors.isEmpty()){
       console.log(errors);
-      res.render('subreddit_create_form', {title: 'Create a Subreddit', errors: errors.array(), subreddit: req.body});
+      res.render('subForum_create_form', {title: 'Create a SubForum', errors: errors.array(), subForum: req.body});
       return;
     }
     else{
-      var subreddit_moderator = new SubredditModerator({
+      var subForum_moderator = new SubForumModerator({
         user: res.locals.currentUser._id,
         head_mod: true,
         can_appoint: true,
@@ -52,9 +52,9 @@ exports.subreddit_create_post = [
         can_edit_sub_details: true,
         can_remove: true
       })
-      subreddit_moderator.save(function(err, moderator){
+      subForum_moderator.save(function(err, moderator){
         if(err){return next(err);}
-        var subreddit = new Subreddit({
+        var subForum = new SubForum({
           name: req.body.name,
           title: (req.body.title === '' ? req.body.name: req.body.title),
           description: req.body.description,
@@ -64,12 +64,12 @@ exports.subreddit_create_post = [
           custom_submit_link_button: req.body.custom_submit_link_button,
           custom_submit_text_button: req.body.custom_submit_text_button
         });
-        subreddit.save(function(err){
+        subForum.save(function(err){
           if(err){return next(err);}
-          subreddit_moderator.subreddit = subreddit._id;
-          subreddit_moderator.save(function(err,){
+          subForum_moderator.subForum = subForum._id;
+          subForum_moderator.save(function(err,){
             if(err){return next(err);}
-            return res.redirect('/r/'+subreddit.name);
+            return res.redirect('/r/'+subForum.name);
           })
         })
       })

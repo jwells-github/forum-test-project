@@ -23,8 +23,8 @@ var removalRouter = require('./routes/removal');
 var votingRouter = require('./routes/voting');
 var signupRouter = require('./routes/signup');
 var loginRouter = require('./routes/login');
-var subredditRouter = require('./routes/subreddit');
-var subredditDetailRouter = require('./routes/subredditDetail');
+var subForumRouter = require('./routes/subForum');
+var subForumDetailRouter = require('./routes/subForumDetail');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -47,14 +47,37 @@ app.use(function(req, res, next) {
   next();
 });
 
+const SubForumBan = require('./models/subForum_ban');
+
+app.use('/r/:subForumName', function(req,res,next){
+  if(res.locals.currentUser){
+    SubForumBan.findOne({banned_user: res.locals.currentUser._id, subForum_name: req.params.subForumName})
+    .exec(function(err,banned_user){
+      if(err){return next(err);}
+      if(banned_user){
+        var err = new Error('You are banned from viewing this subForum')
+        err.status = 401;
+        return next(err);
+      }
+      else{
+        next();
+      }
+    })
+  }
+  else{
+    next();
+  }
+
+})
+
 app.use('/', indexRouter);
 app.use('/delete', deletionRouter);
 app.use('/remove', removalRouter);
 app.use('/vote', votingRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
-app.use('/subreddits', subredditRouter);
-app.use('/r',subredditDetailRouter); 
+app.use('/subForums', subForumRouter);
+app.use('/r',subForumDetailRouter); 
 app.use('/u', usersRouter);
 
 app.get('/logout', function(req, res){

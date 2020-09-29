@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const SubredditModerator = new Schema(
+const SubForumModeratorSchema = new Schema(
     {
         user: {type:Schema.Types.ObjectId, ref:'User'},
-        subreddit: {type:Schema.Types.ObjectId, ref:'Subreddit'},
+        subForum: {type:Schema.Types.ObjectId, ref:'SubForum'},
         head_mod: {type: Boolean, default: false},
         appointment_date: {type: Date, default: Date.now},
         can_appoint: {type: Boolean, default: false},
@@ -14,4 +14,4 @@ const SubredditModerator = new Schema(
     }
 )
 
-module.exports = mongoose.model('SubredditModerator', SubredditModerator);
+module.exports = mongoose.model('SubForumModerator', SubForumModeratorSchema);

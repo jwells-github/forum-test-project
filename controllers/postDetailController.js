@@ -12,7 +12,7 @@ const getUserVotes = require('../public/javascripts/getUserVotes.js');
 exports.post_get = function(req,res,next){
   Post.findById(req.params.postID)
   .populate({
-    path:'subreddit',
+    path:'subForum',
     populate: {
       path: 'moderators'
     }
@@ -78,7 +78,7 @@ exports.post_comment_post = [
       Post.findById(req.params.postID).exec(function(err,post){
         if(err){return next(err);}
         var comment = new Comment({
-          subreddit: post.subreddit,
+          subForum: post.subForum,
           post: post._id,
           text:req.body.text,
           submitter:res.locals.currentUser,

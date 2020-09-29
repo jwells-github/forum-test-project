@@ -9,9 +9,9 @@ const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
 var searchController = require('../controllers/searchController');
 
-router.get('/search', searchController.subreddit_search_get)
+router.get('/search', searchController.subForum_search_get)
 
-router.post('/search', searchController.subreddit_search_post)
+router.post('/search', searchController.subForum_search_post)
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     posts: function(callback){
       Post.find()
       .sort({date_created_at:-1, upvote_count :1})
-      .populate('subreddit')
+      .populate('subForum')
       .exec(callback);
     },
     post_upvotes: function(callback){
@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
     if(res.locals.currentUser){
       posts = getUserVotes(results.posts, results.post_upvotes, results.post_downvotes);
     }
-    res.render('index', { title: 'Express', posts:posts});
+    res.render('index', { title: 'Forum Project', posts:posts});
   })
   
 });

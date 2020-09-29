@@ -8,7 +8,7 @@ const PostSchema = new Schema(
         text:{type:String, default:'', maxlength: 40000},
         link:{type:String, default:''},
         submitter: {type:Schema.Types.ObjectId, ref:'User'},
-        subreddit: {type:Schema.Types.ObjectId, ref:'Subreddit'},
+        subForum: {type:Schema.Types.ObjectId, ref:'SubForum'},
         number_of_comments: {type: Number, default: 0},
         date_created_at: {type: Date, default: Date.now},
         upvote_count: {type:Number, default:0},

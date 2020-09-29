@@ -2,10 +2,10 @@ extends layout
 
 block content
   h1 You Searched: #{title}
-  if subreddits.length > 0
-    each subreddit in subreddits
-      a(href='/r/'+subreddit.name) #{subreddit.name}
-      p=subreddit.description
+  if subForums.length > 0
+    each subForum in subForums
+      a(href='/r/'+subForum.name) #{subForum.name}
+      p=subForum.description
   else
-    h1 No Subreddits were found
+    h1 No SubForums were found
 

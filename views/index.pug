@@ -5,10 +5,11 @@ block content
   p Welcome to #{title}
   if locals.currentUser
     p YOU ARE LOGGED IN
-    a(href="/subreddits/create") create sub
+    a(href="/subForums/create") create sub
 
   - let is_front_page = true
   include shared/post_list.pug
   script
     include ../public/javascripts/postVote.js
     include ../public/javascripts/fetchPost.js
+    include ../public/javascripts/toggleActionConfirmation.js

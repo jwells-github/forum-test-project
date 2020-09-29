@@ -5,7 +5,7 @@ block content
   p Welcome to #{title}
   if locals.currentUser
     p YOU ARE LOGGED IN
-    a(href="/subreddits/create") create sub
+    a(href="/subForums/create") create sub
   each submission in submission_history
     div.submission
       if submission.title

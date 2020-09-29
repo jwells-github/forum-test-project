@@ -1,21 +1,21 @@
-function removePostToggle(subredditName, postID, element){
-  fetchPost('../../remove/post/'+subredditName+'/'+postID).then(response =>{
+function removePostToggle(subForumName, postID, element){
+  fetchPost('../../remove/post/'+subForumName+'/'+postID).then(response =>{
     if(response.status === 200){
-      console.log('success');
+      toggleClass(element.parentNode.parentNode.parentNode, 'delete-hide'); 
     }
     else{
-      console.log('failure');
+      element.previousSibling.nodeValue = 'Something went wrong, please try again shortly.';
     } 
   });
 }
 
-function removeCommentToggle(subredditName,commentID, element){
-  fetchPost('../../remove/comment/'+subredditName+'/'+commentID).then(response =>{
+function removeCommentToggle(subForumName,commentID, element){
+  fetchPost('../../remove/comment/'+subForumName+'/'+commentID).then(response =>{
     if(response.status === 200){
-      console.log('success');
+      // do something
     }
     else{
-      console.log('failure');
+      element.previousSibling.nodeValue = 'Something went wrong, please try again shortly.';
     } 
   });
 }
