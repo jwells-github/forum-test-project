@@ -33,18 +33,6 @@ exports.subreddit_create_post = [
   body('description', 'descriptions must be less than 50 characters').isLength({max:500}),
   body('sidebar','sidebar must be less than 10240 characters').isLength({max:10240}),
   body('submission_text', 'submission text must be less than 1024 characters').isLength({max:1024}),
-  body('type', 'invalid type option').custom(value =>{
-    if(value !== 'public' && value !== 'restricted' && value !== 'private'){
-      throw new Error('invalid type');
-    }
-    return true;
-  }),
-  body('content_options', 'invalid content option').custom(value =>{
-    if(value !== 'any' && value !== 'links-only' && value !== 'textposts-only'){
-      throw new Error('invalid content option');
-    }
-    return true;
-  }),
   body('custom_submit_link_button', 'custom submit link button must be less than 25 characters').isLength({max:25}),
   body('custom_submit_text_button', 'custom submit text  button must be less than 25 characters').isLength({max:25}),
   
@@ -72,10 +60,7 @@ exports.subreddit_create_post = [
           description: req.body.description,
           sidebar: req.body.sidebar,
           submission_text: req.body.submission_text,
-          type: req.body.type, 
-          approved_users: [res.locals.currentUser],
           moderators: [moderator._id],
-          content_options: req.body.content_options,
           custom_submit_link_button: req.body.custom_submit_link_button,
           custom_submit_text_button: req.body.custom_submit_text_button
         });
