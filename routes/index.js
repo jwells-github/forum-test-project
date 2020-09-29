@@ -7,6 +7,12 @@ const async = require("async");
 
 const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
+var searchController = require('../controllers/searchController');
+
+router.get('/search', searchController.subreddit_search_get)
+
+router.post('/search', searchController.subreddit_search_post)
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   async.parallel({

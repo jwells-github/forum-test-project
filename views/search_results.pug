@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 You Searched: #{title}
+  if subreddits.length > 0
+    each subreddit in subreddits
+      a(href='/r/'+subreddit.name) #{subreddit.name}
+      p=subreddit.description
+  else
+    h1 No Subreddits were found
+

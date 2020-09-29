@@ -7,10 +7,71 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/subreddit.css')
   body
-    if(locals.currentUser)
-      a(href='/logout') Logout
-    else
-      a(href="/login") Login
-      br
-      a(href='/signup') Signup
-    block content
+    div.header.container-fluid
+      div.row
+        div.col-auto.home-button
+          a(href='/') Reddit<br/>Clone
+        div.col
+          div.row.subreddit-shortcuts
+            div.col
+              ul
+                li
+                  span MY SUBREDDITS
+                li
+                  a(href='/') HOME
+                li
+                  a RANDOM
+                li
+                  a MOD
+                li
+                  span |
+                li
+                  a Subreddit1
+                li
+                  a Subreddit2
+                li
+                  a Sub3
+                li
+                  a Sub4
+                li
+                  a Sub5                      
+          div.row
+            div.col.page-title
+              h1=(subreddit?subreddit.name:'All')
+            div.col-auto.subreddit-search
+              form(method='POST' action='/search')
+                div.searchbar
+                  label(for='search') Find a Subreddit:
+                  input#search(type='text' name='search' required='true')
+                button(type='submit') Submit  
+          div.row
+            div.col-auto
+              ul  
+                li
+                  a hot
+                li
+                  a new
+                li
+                  a top
+            div.col
+            div.col-auto
+              ul
+                if locals.currentUser
+                  li
+                    a(href='/u/'+locals.currentUser.username) #{locals.currentUser.username}
+                  li
+                    a X
+                  li
+                    a(href="/logout") logout
+                else  
+                  li 
+                      a(href="/login") Login 
+                      span or 
+                      a(href="/signup") Sign up
+    div.main.container-fluid
+      div.row
+        div.content.col
+          block content
+        if sidebar
+          div.sidebar.col-auto  
+            p text

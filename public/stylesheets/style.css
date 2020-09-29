@@ -26,6 +26,15 @@ a {
   font-size:14px;
 }
 
+.subreddit-search form{
+  display:flex;
+}
+
+.subreddit-search input{
+  height: 100%;
+  margin-left: 12px;
+}
+
 .header ul{
   padding: 0;
 }
