@@ -13,7 +13,6 @@ div.comment
         h2 REMOVED
         p= (comment.is_deleted ? 'Deleted' : comment.text)
         p= (comment.is_deleted ? 'Deleted' : comment.submitter.username)
-        p= comment._id
         -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
         -let actionName = 'Reinstate Comment'
         include action_confirmation.pug
@@ -31,8 +30,13 @@ div.comment
           -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
           -let actionName = 'Remove'
           include action_confirmation.pug
-        form(method='POST')
-          div.form-group
-            textarea#text.form-control(type='text' name='text' required='true')
-            input(type='hidden' name='parentCommentID' value=comment._id)
-          button.btn.btn-primary(type='submit') Submit 
+        
+        form(method='POST').toggle
+          span.option.active
+            a(href='javascript:;' onclick='toggleConfirmation(this)') Reply
+          div.option
+            div.form-group
+              textarea#text.form-control(type='text' name='text' required='true')
+              input(type='hidden' name='parentCommentID' value=comment._id)
+            button.btn.btn-primary(type='submit') Submit 
+            a(href='javascript:;' onclick='toggleConfirmation(this)') Cancel
