@@ -24,4 +24,7 @@ CommentSchema.virtual('submission_age').get(function(){
     return getAge(this.date_created_at);
 });
 
+CommentSchema.virtual('vote_score').get(function(){
+    return this.upvote_count - this.downvote_count;
+});
 module.exports = mongoose.model('Comment', CommentSchema);
