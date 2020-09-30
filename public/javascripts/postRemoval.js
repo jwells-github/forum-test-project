@@ -9,10 +9,17 @@ function removePostToggle(subForumName, postID, element){
   });
 }
 
-function removeCommentToggle(subForumName,commentID, element){
+function removeCommentToggle(subForumName,commentID, reinstateComment, element){
   fetchPost('../../remove/comment/'+subForumName+'/'+commentID).then(response =>{
     if(response.status === 200){
-      // do something
+      toggleClass(element.parentNode, 'active');
+      if(reinstateComment){
+        document.getElementById('action-message').innerHTML = 'Comment Reinstated'
+      }
+      else{
+        document.getElementById('action-message').innerHTML = 'Comment Removed'
+      }
+      
     }
     else{
       element.previousSibling.nodeValue = 'Something went wrong, please try again shortly.';

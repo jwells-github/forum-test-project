@@ -75,6 +75,9 @@ a {
   display: inline;
   padding-left: 6px;
 }
+.post-details span{
+  padding-right:8px;
+}
 
 .post-score{
   text-align: center;

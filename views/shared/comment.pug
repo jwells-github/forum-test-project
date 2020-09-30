@@ -17,7 +17,8 @@ div.comment
     else
       //- The user can see the removed post because they are a moderator
       if is_moderator
-        h2 COMMENT HAS BEEN REMOVED
+        if !comment.is_deleted
+          h2 COMMENT HAS BEEN REMOVED
         div.comment-details
           a(href=(comment.is_deleted ? '' : '/u/'+comment.submitter.username))
            =(comment.is_deleted ? 'Deleted' : comment.submitter.username)
@@ -36,6 +37,8 @@ div.comment
     //- The user is logged in
     if locals.currentUser
       if !comment.is_deleted 
+        div
+          span#action-message
         div.comment-actions
 
           if String(locals.currentUser._id) === String(comment.submitter._id)
