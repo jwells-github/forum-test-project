@@ -4,33 +4,53 @@ div.comment
         button(onclick="upvoteComment('"+comment._id +"',this)" class=(comment.user_vote === 1 ? 'upvote' : '')) ^
         button(onclick="downvoteComment('"+comment._id +"',this)" class=(comment.user_vote === -1 ? 'downvote' : '')) v
   div.comment-body
+    //- Comment has not been removed
     if !comment.is_removed
-      p= (comment.is_deleted ? 'Deleted' : comment.text)
-      p= (comment.is_deleted ? 'Deleted' : comment.submitter.username)
-      p= comment._id
-    else
-      if is_moderator
-        h2 REMOVED
+      div.comment-details
+        a(href=(comment.is_deleted ? '' : '/u/'+comment.submitter.username))
+          =(comment.is_deleted ? 'Deleted' : comment.submitter.username)
+        span=(comment.is_deleted ? '' : comment.vote_score + ' points')
+        span=comment.submission_age
+      div.comment-text
         p= (comment.is_deleted ? 'Deleted' : comment.text)
-        p= (comment.is_deleted ? 'Deleted' : comment.submitter.username)
-        -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
-        -let actionName = 'Reinstate Comment'
-        include action_confirmation.pug
+    //- Comment has been removed
+    else
+      //- The user can see the removed post because they are a moderator
+      if is_moderator
+        h2 COMMENT HAS BEEN REMOVED
+        div.comment-details
+          a(href=(comment.is_deleted ? '' : '/u/'+comment.submitter.username))
+           =(comment.is_deleted ? 'Deleted' : comment.submitter.username)
+          span=(comment.is_deleted ? '' : comment.vote_score + ' points')
+          span=comment.submission_age
+        div.comment-text
+          p= (comment.is_deleted ? 'Deleted' : comment.text)
+      //- The user is not a moderator and cannot see the removed post
       else
-        p Deleted
-        p Deleted
+        div.comment-details
+          a(href='') Deleted 
+          span 
+          span=comment.submission_age
+        div.comment-text
+          p= Deleted
+    //- The user is logged in
     if locals.currentUser
-      if !comment.is_deleted && !comment.is_removed
-        if String(locals.currentUser._id) === String(comment.submitter._id)
-          -let clickAction = "deleteComment('"+  comment._id + "',this)"
-          -let actionName = 'Delete'
-          include action_confirmation.pug
+      if !comment.is_deleted 
+        div.comment-actions
 
-        if is_moderator
-          -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
-          -let actionName = 'Remove'
-          include action_confirmation.pug
-        
+          if String(locals.currentUser._id) === String(comment.submitter._id)
+            -let clickAction = "deleteComment('"+  comment._id + "',this)"
+            -let actionName = 'Delete'
+            include action_confirmation.pug
+          if is_moderator
+            if !comment.is_removed
+              -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
+              -let actionName = 'Remove'
+              include action_confirmation.pug
+            else
+              -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
+              -let actionName = 'Reinstate Comment'
+              include action_confirmation.pug
         form(method='POST').toggle
           span.option.active
             a(href='javascript:;' onclick='toggleConfirmation(this)') Reply
