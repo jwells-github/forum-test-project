@@ -14,10 +14,11 @@ function removeCommentToggle(subForumName,commentID, reinstateComment, element){
     if(response.status === 200){
       toggleClass(element.parentNode, 'active');
       if(reinstateComment){
-        document.getElementById('action-message').innerHTML = 'Comment Reinstated'
+        element.parentNode.parentNode.parentNode.previousSibling.childNodes[0].innerHTML = 'Comment Reinstated'
+        // document.getElementById('action-message').innerHTML = 'Comment Reinstated'
       }
       else{
-        document.getElementById('action-message').innerHTML = 'Comment Removed'
+        element.parentNode.parentNode.parentNode.previousSibling.childNodes[0].innerHTML = 'Comment Removed'
       }
       
     }

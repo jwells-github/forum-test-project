@@ -47,11 +47,11 @@ div.comment
             include action_confirmation.pug
           if is_moderator
             if !comment.is_removed
-              -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
+              -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"',false, this)"
               -let actionName = 'Remove'
               include action_confirmation.pug
             else
-              -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"', this)"
+              -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"',true, this)"
               -let actionName = 'Reinstate Comment'
               include action_confirmation.pug
         form(method='POST').toggle
