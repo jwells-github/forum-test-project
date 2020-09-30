@@ -53,7 +53,7 @@ div.comment
             else
               -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"',true, this)"
               -let actionName = 'Reinstate Comment'
-              include action_confirmation.pug
+              include action_confirmation.pug 
         form(method='POST').toggle
           span.option.active
             a(href='javascript:;' onclick='toggleConfirmation(this)') Reply

@@ -1,10 +1,16 @@
-function removePostToggle(subForumName, postID, element){
+function removePostToggle(subForumName, postID,reinstatePost, element){
   fetchPost('../../remove/post/'+subForumName+'/'+postID).then(response =>{
     if(response.status === 200){
-      toggleClass(element.parentNode.parentNode.parentNode, 'delete-hide'); 
+      toggleClass(element.parentNode, 'active'); 
+      if(reinstatePost){
+        element.parentNode.parentNode.nextSibling.innerHTML = 'Post Reinstated'
+      }
+      else{
+        element.parentNode.parentNode.nextSibling.innerHTML = 'Post Removed'
+      }
     }
     else{
-      element.previousSibling.nodeValue = 'Something went wrong, please try again shortly.';
+      element.parentNode.parentNode.nextSibling.innerHTML = 'Something went wrong, please try again shortly.';
     } 
   });
 }
@@ -23,7 +29,7 @@ function removeCommentToggle(subForumName,commentID, reinstateComment, element){
       
     }
     else{
-      element.previousSibling.nodeValue = 'Something went wrong, please try again shortly.';
+      element.parentNode.parentNode.parentNode.previousSibling.childNodes[0].innerHTML = 'Something went wrong, please try again shortly.';
     } 
   });
 }
