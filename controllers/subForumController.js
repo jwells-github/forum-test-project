@@ -3,6 +3,14 @@ const SubForumModerator = require('../models/subForum_moderator');
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 
+
+exports.subForums_get = function(req,res,next){
+  SubForum.find().exec(function(err,subForums){
+    if(err){return next(err);}
+    res.render('subForum_list', {title: 'SubForums', subForums:subForums});
+  })
+}
+
 exports.subForum_create_get = function(req,res,next){
   if(res.locals.currentUser){
     res.render('subForum_create_form', {title: 'Create a SubForum'});
