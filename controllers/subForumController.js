@@ -34,7 +34,9 @@ exports.subForum_create_post = [
   body('name', 'Names must be longer than 2 characters and may only contain Numbers and English characters')
     .isLength({min:2})
     .custom(value =>{
-      return SubForum.findOne({'name':value}).then(subForum =>{
+      let matchRegex = new RegExp("("+value+")\\b","i")
+      console.log(matchRegex)
+      return SubForum.findOne({'name':{$regex: matchRegex}}).then(subForum =>{
         if(subForum){
           return Promise.reject('A SubForum with this name already exists')
         }
