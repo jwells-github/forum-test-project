@@ -5,11 +5,9 @@ block content
   form(method='POST')
     div.form-group
       label(for='title') title:
-      input#title.form-control(type='text' name='title'
-                                   value='')
+      input#title.form-control(type='text' name='title' value='')
       label(for='link') url:
-      textarea#link.form-control(type='text'  name='link'
-                                  required='true'  value=(undefined===username ? '' : username))
+      input#link.form-control(type='text'  name='link' required='true' )
     button.btn.btn-primary(type='submit') Submit
   if errors 
     ul
