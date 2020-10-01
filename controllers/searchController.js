@@ -18,6 +18,6 @@ exports.subForum_search_get = function(req,res){
 exports.subForum_search_post = [
   body('search').trim().escape(),
   (req,res,next) => {
-      res.redirect('/search?searchterm=' + req.body.search);
+      res.redirect('/subforums/search?searchterm=' + req.body.search);
   }
 ]

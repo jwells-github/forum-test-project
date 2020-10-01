@@ -39,7 +39,7 @@ html
             div.col.page-title
               h1=(subForum?subForum.name:'All')
             div.col-auto.subForum-search
-              form(method='POST' action='/search')
+              form(method='POST' action='/subforums/search')
                 div.searchbar
                   label(for='search') Find a SubForum:
                   input#search(type='text' name='search' required='true')
