@@ -76,7 +76,7 @@ app.use('/remove', removalRouter);
 app.use('/vote', votingRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
-app.use('/subForums', subForumRouter);
+app.use('/subforums', subForumRouter);
 app.use('/r',subForumDetailRouter); 
 app.use('/u', usersRouter);
 

@@ -11,6 +11,15 @@ exports.subForums_get = function(req,res,next){
   })
 }
 
+exports.random_subForum_get = function(req,res,next){
+  SubForum.count().exec(function(err,count){
+    let random = Math.floor(Math.random() * count);
+    SubForum.findOne().skip(random).exec(function(err,subForum){
+      res.redirect('/r/'+subForum.name);
+    })
+  })
+}
+
 exports.subForum_create_get = function(req,res,next){
   if(res.locals.currentUser){
     res.render('subForum_create_form', {title: 'Create a SubForum'});

@@ -6,6 +6,8 @@ var searchController = require('../controllers/searchController');
 
 router.get('/',subForumController.subForums_get);
 
+router.get('/random',subForumController.random_subForum_get);
+
 router.get('/create', subForumController.subForum_create_get);
 
 router.post('/create', subForumController.subForum_create_post);
