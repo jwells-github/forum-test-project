@@ -7,12 +7,6 @@ const async = require("async");
 
 const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
-var searchController = require('../controllers/searchController');
-
-router.get('/search', searchController.subForum_search_get)
-
-router.post('/search', searchController.subForum_search_post)
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   async.parallel({
@@ -20,6 +14,7 @@ router.get('/', function(req, res, next) {
       Post.find()
       .sort({date_created_at:-1, upvote_count :1})
       .populate('subForum')
+      .populate('submitter')
       .exec(callback);
     },
     post_upvotes: function(callback){
