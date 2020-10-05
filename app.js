@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var flash = require('connect-flash');
 const session = require("express-session");
 const passport = require('passport');
 require('./config/passport')(passport);
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());  
+app.use(flash());
 
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
