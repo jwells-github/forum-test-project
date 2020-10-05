@@ -35,7 +35,6 @@ exports.subForum_create_post = [
     .isLength({min:2})
     .custom(value =>{
       let matchRegex = new RegExp("("+value+")\\b","i")
-      console.log(matchRegex)
       return SubForum.findOne({'name':{$regex: matchRegex}}).then(subForum =>{
         if(subForum){
           return Promise.reject('A SubForum with this name already exists')
