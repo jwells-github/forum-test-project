@@ -316,6 +316,7 @@ exports.subForum_edit_details_post = [
             subForum.custom_submit_text_button = req.body.custom_submit_text_button;
             subForum.save(function(err){
               if(err){return next(err);}
+              req.flash('info', 'SubForum details changed successfully!')
               res.redirect('/r/'+subForum.name)
             })
           }
