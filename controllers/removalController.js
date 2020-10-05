@@ -10,7 +10,8 @@ exports.comment_remove_toggle = (req,res,next) =>{
         Comment.findById(req.params.commentID).exec(callback);
       },
       subForum: function(callback){
-        SubForum.findOne({name: req.params.subForum})
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name: {$regex: matchRegex}})
         .populate('moderators')
         .exec(callback);
       }
@@ -46,7 +47,8 @@ exports.post_remove_toggle = (req,res,next)=>{
         Post.findById(req.params.postID).exec(callback);
       },
       subForum: function(callback){
-        SubForum.findOne({name: req.params.subForum})
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name: {$regex: matchRegex}})
         .populate('moderators')
         .exec(callback);
       }
