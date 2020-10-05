@@ -9,7 +9,7 @@ exports.user_create_get = function(req,res,next){
     res.redirect('/')
   }
   else{
-    res.render('signup_form', {title: 'Signup'});
+    res.render('signup_form', {title: 'Signup', flash_messages: req.flash('info')});
   }
 }
 
