@@ -9,6 +9,14 @@ const PostDownvote = require("../models/votes/post_downvote");
 const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
 exports.subForum_get = function(req,res,next){
+  let now = new Date(Date.now())
+  let one_day_ago = new Date()
+  one_day_ago.setHours(now.getHours()-24)
+  let two_days_ago = new Date()
+  two_days_ago.setHours(now.getHours()-(24*2))
+  let one_week_ago = new Date();
+  one_week_ago.setHours(now.getHours()-(24*7));
+
   let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
   SubForum.findOne({name: {$regex: matchRegex}})
   .populate('moderators')
@@ -20,8 +28,30 @@ exports.subForum_get = function(req,res,next){
       return next(err);
     }
     async.parallel({
-      posts:function(callback){
-        Post.find({subForum:subForum._id})
+      todays_posts: function(callback){
+        Post.find({subForum: subForum._id, date_created_at: {$gte: one_day_ago}})
+        .sort({upvote_count :-1})
+        .populate('subForum')
+        .limit(50)
+        .exec(callback)
+      },
+      yesterdays_posts: function(callback){
+        Post.find({subForum: subForum._id, date_created_at: {$gte: two_days_ago, $lt: one_day_ago}})
+        .sort({upvote_count :-1})
+        .populate('subForum')
+        .limit(50)
+        .exec(callback)
+      },
+      last_weeks_posts: function(callback){
+        Post.find({subForum: subForum._id, date_created_at: {$gte: one_week_ago, $lt: two_days_ago}})
+        .sort({upvote_count :-1})
+        .populate('subForum')
+        .limit(50)
+        .exec(callback)
+      },
+      older_posts: function(callback){
+        Post.find({subForum: subForum._id, date_created_at: {$lt: one_week_ago}})
+        .sort({upvote_count :-1})
         .populate('subForum')
         .limit(50)
         .exec(callback)
@@ -42,11 +72,11 @@ exports.subForum_get = function(req,res,next){
       }
     }, function(err,results){
       if(err){return next(err);}
-      let posts = results.posts;
+      let posts = results.todays_posts.concat(results.yesterdays_posts,results.last_weeks_posts,results.older_posts);
       if(res.locals.currentUser){
-        posts = getUserVotes(results.posts, results.post_upvotes, results.post_downvotes);
+        posts = getUserVotes(posts, results.post_upvotes, results.post_downvotes);
       }
-      res.render('subForum_detail', {title: subForum.title, subForum:subForum, posts:posts})
+      res.render('subForum_detail', {title: subForum.title, subForum:subForum, posts:posts, flash_messages: req.flash('info')})
     })
   })
 }
@@ -120,7 +150,8 @@ exports.subForum_text_form_get = function(req,res,next){
     });
   }
   else{
-    res.redirect('/');
+    req.flash('info', 'You must have an account in order to make a submission!')
+    res.redirect('/signup');
   }
 }
 
@@ -141,7 +172,8 @@ exports.subForum_link_form_get = function(req,res,next){
     });
   }
   else{
-    res.redirect('/');
+    req.flash('info', 'You must have an account in order to make a submission!')
+    res.redirect('/signup');
   }
 }
 
@@ -226,16 +258,19 @@ exports.subForum_edit_details_get = function(req,res,next){
           res.render('subForum_edit_form', {title: 'Edit ' + subForum.name, subForum: subForum});
         }
         else{
-          res.redirect('/');
+          req.flash('info', 'You do not have permission to edit this subforum')
+          res.redirect('/r/'+subForum.name);
         }
       }
       else{
-        res.redirect('/');
+        req.flash('info', 'You do not have permission to edit this subforum')
+        res.redirect('/r/'+subForum.name);
       }
     })
   }
   else{
-    res.redirect('/');
+    req.flash('info', 'You do not have permission to edit this subforum')
+    res.redirect('/r/'+req.params.subForumName);
   }
 }
 
