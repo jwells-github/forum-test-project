@@ -55,44 +55,48 @@ exports.subForum_create_post = [
   body('custom_submit_text_button', 'custom submit text  button must be less than 25 characters').isLength({max:25}),
   
   (req,res,next) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-      console.log(errors);
-      res.render('subForum_create_form', {title: 'Create a SubForum', errors: errors.array(), subForum: req.body});
-      return;
-    }
-    else{
-      var subForum_moderator = new SubForumModerator({
-        user: res.locals.currentUser._id,
-        head_mod: true,
-        can_appoint: true,
-        can_ban: true,
-        can_edit_sub_details: true,
-        can_remove: true
-      })
-      subForum_moderator.save(function(err, moderator){
-        if(err){return next(err);}
-        var subForum = new SubForum({
-          name: req.body.name,
-          title: (req.body.title === '' ? req.body.name: req.body.title),
-          description: req.body.description,
-          sidebar: req.body.sidebar,
-          submission_text: req.body.submission_text,
-          moderators: [moderator._id],
-          custom_submit_link_button: req.body.custom_submit_link_button,
-          custom_submit_text_button: req.body.custom_submit_text_button
-        });
-        subForum.save(function(err){
+    if(res.locals.currentUser){
+      const errors = validationResult(req);
+      if(!errors.isEmpty()){
+        res.render('subForum_create_form', {title: 'Create a SubForum', errors: errors.array(), subForum: req.body});
+        return;
+      }
+      else{
+        var subForum_moderator = new SubForumModerator({
+          user: res.locals.currentUser._id,
+          head_mod: true,
+          can_appoint: true,
+          can_ban: true,
+          can_edit_sub_details: true,
+          can_remove: true
+        })
+        subForum_moderator.save(function(err, moderator){
           if(err){return next(err);}
-          subForum_moderator.subForum = subForum._id;
-          subForum_moderator.save(function(err,){
+          var subForum = new SubForum({
+            name: req.body.name,
+            title: (req.body.title === '' ? req.body.name: req.body.title),
+            description: req.body.description,
+            sidebar: req.body.sidebar,
+            submission_text: req.body.submission_text,
+            moderators: [moderator._id],
+            custom_submit_link_button: req.body.custom_submit_link_button,
+            custom_submit_text_button: req.body.custom_submit_text_button
+          });
+          subForum.save(function(err){
             if(err){return next(err);}
-            return res.redirect('/r/'+subForum.name);
+            subForum_moderator.subForum = subForum._id;
+            subForum_moderator.save(function(err,){
+              if(err){return next(err);}
+              return res.redirect('/r/'+subForum.name);
+            })
           })
         })
-      })
-
+      }
+    }
+    else{
+      var err = new Error('You have invalid permissions');
+      err.status = 403;
+      return next(err);
     }
   }
-
 ]

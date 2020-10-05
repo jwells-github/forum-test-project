@@ -265,6 +265,7 @@ exports.removed_list_get = function(req,res,next){
           removed_posts: function(callback){
             Post.find({subForum:subForum._id, is_removed: true})
             .populate('subForum')
+            .limit(50)
             .exec(callback);
           },
           removed_comments: function(callback){

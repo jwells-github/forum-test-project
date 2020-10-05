@@ -21,7 +21,10 @@ exports.profile_get = (req,res,next) =>{
     } 
     async.parallel({
       posts: function(callback){
-        Post.find({submitter: user._id}).populate('subForum').exec(callback);
+        Post.find({submitter: user._id})
+        .populate('subForum')
+        .limit(50)
+        .exec(callback);
       },
       comments: function(callback){
         Comment.find({submitter: user._id})

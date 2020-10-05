@@ -12,6 +12,7 @@ exports.default_view_get =  function(req, res, next) {
       .sort({upvote_count :1})
       .populate('subForum')
       .populate('submitter')
+      .limit(50)
       .exec(callback);
     },
     post_upvotes: function(callback){
@@ -52,6 +53,7 @@ exports.sorted_get = function(req,res,next){
       .sort(sortParam)
       .populate('subForum')
       .populate('submitter')
+      .limit(50)
       .exec(callback);
     },
     post_upvotes: function(callback){

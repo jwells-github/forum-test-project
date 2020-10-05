@@ -23,6 +23,7 @@ exports.subForum_get = function(req,res,next){
       posts:function(callback){
         Post.find({subForum:subForum._id})
         .populate('subForum')
+        .limit(50)
         .exec(callback)
       },
       post_upvotes: function(callback){
@@ -73,6 +74,7 @@ exports.subForum_sorted_get = function(req,res,next){
         Post.find({subForum:subForum._id})
         .populate('subForum')
         .sort(sortParam)
+        .limit(50)
         .exec(callback)
       },
       post_upvotes: function(callback){
