@@ -51,7 +51,8 @@ const SubForumBan = require('./models/subForum_ban');
 
 app.use('/r/:subForumName', function(req,res,next){
   if(res.locals.currentUser){
-    SubForumBan.findOne({banned_user: res.locals.currentUser._id, subForum_name: req.params.subForumName})
+    let matchRegex = new RegExp("("+ req.params.subForumName+")\\b","i")
+    SubForumBan.findOne({banned_user: res.locals.currentUser._id, subForum_name: {$regex: matchRegex}})
     .exec(function(err,banned_user){
       if(err){return next(err);}
       if(banned_user){

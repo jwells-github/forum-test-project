@@ -17,6 +17,7 @@ exports.post_get = function(req,res,next){
       path: 'moderators'
     }
   })
+  .populate('submitter')
   .exec(function(err,post){
     if(err){return next(err);}
     if(!post){

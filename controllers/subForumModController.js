@@ -13,7 +13,8 @@ exports.mod_access_get = function(req,res,next){
   if(res.locals.currentUser){
     async.parallel({
       subForum: function(callback){
-        SubForum.findOne({name: req.params.subForumName})
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name:{$regex: matchRegex}})
         .populate({
           path:'moderators',
             populate: {
@@ -68,7 +69,8 @@ exports.mod_access_post = [
       }
       async.parallel({
         subForum:function(callback){
-          SubForum.findOne({name: req.params.subForumName})
+          let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+          SubForum.findOne({name:{$regex: matchRegex}})
           .populate({
             path:'moderators',
               populate: {
@@ -136,7 +138,8 @@ exports.mod_access_ban = (req,res,next) =>{
   if(res.locals.currentUser){
     async.parallel({
       subForum: function(callback){
-        SubForum.findOne({name:req.params.subForumName})
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name:{$regex: matchRegex}})
         .populate({
           path: 'moderators',
             populate: {
@@ -198,7 +201,8 @@ exports.mod_access_unban = (req,res,next) =>{
   if(res.locals.currentUser){
     async.parallel({
       subForum: function(callback){
-        SubForum.findOne({name:req.params.subForumName})
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name:{$regex: matchRegex}})
         .populate({
           path: 'moderators',
             populate: {
@@ -240,7 +244,8 @@ exports.mod_access_unban = (req,res,next) =>{
 
 exports.removed_list_get = function(req,res,next){
   if(res.locals.currentUser){
-    SubForum.findOne({name:req.params.subForumName})
+    let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+    SubForum.findOne({name:{$regex: matchRegex}})
     .populate({
       path:'moderators',
         populate: {
@@ -295,7 +300,8 @@ exports.mod_permissions_post = (req,res,next) =>{
   if(res.locals.currentUser){
     async.parallel({
       subForum: function(callback){
-        SubForum.findOne({name: req.params.subForumName})
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name:{$regex: matchRegex}})
         .populate({
           path:'moderators',
             populate: {

@@ -9,7 +9,8 @@ const PostDownvote = require("../models/votes/post_downvote");
 const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
 exports.subForum_get = function(req,res,next){
-  SubForum.findOne({name: req.params.subForumName})
+  let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+  SubForum.findOne({name: {$regex: matchRegex}})
   .populate('moderators')
   .exec(function(err,subForum){
     if(err){return next(err);}
@@ -51,7 +52,8 @@ exports.subForum_get = function(req,res,next){
 
 exports.subForum_text_form_get = function(req,res,next){
   if(res.locals.currentUser){
-    SubForum.findOne({name: req.params.subForumName})
+    let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+    SubForum.findOne({name: {$regex: matchRegex}})
     .exec(function(err,subForum){
       if(err){return next(err);}
       if(!subForum){
@@ -71,7 +73,8 @@ exports.subForum_text_form_get = function(req,res,next){
 
 exports.subForum_link_form_get = function(req,res,next){
   if(res.locals.currentUser){
-    SubForum.findOne({name: req.params.subForumName})
+    let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+    SubForum.findOne({name:{$regex: matchRegex}})
     .exec(function(err,subForum){
       if(err){return next(err);}
       if(!subForum){
@@ -118,7 +121,8 @@ exports.subForum_post =[
       return; 
     }
     else{
-      SubForum.findOne({name: req.params.subForumName})
+      let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+      SubForum.findOne({name:{$regex: matchRegex}})
       .exec(function(err,subForum){
         if(err){return next(err);}
         if(!subForum){
