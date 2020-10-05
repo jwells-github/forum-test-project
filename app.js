@@ -85,6 +85,7 @@ app.use('/u', usersRouter);
 
 app.get('/logout', function(req, res){
   req.logout();
+  req.flash('info', 'Succesfully logged out')
   res.redirect('/');
 });
 
