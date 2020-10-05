@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1 Create a SubForum 
+  form(method='POST')
+    div.form-group
+      div
+        h2 Title 
+        p e.g., books: made from trees or pixels. recommendations, news, or thoughts
+        input#title.form-control(type='text' name='title'
+                                    value=(undefined===subForum ? '' : subForum.title))
+      div
+        h2 Description 
+        p Appears in search results and social media links. 500 characters max.
+        input#description.form-control(type='text' name='description'
+                                    value=(undefined===subForum ? '' : subForum.description))
+      div
+        h2 Sidebar 
+        p Shown in the sidebar of your subForum. 10240 characters max.
+        input#sidebar.form-control(type='text' name='sidebar'
+                                    value=(undefined===subForum ? '' : subForum.sidebar))       
+      div
+        h2 Submission Text 
+        p text to show on submission page. 1024 characters max.
+        input#submission_text.form-control(type='text' name='submission_text'
+                                    value=(undefined===subForum ? '' : subForum.submission_text))     
+      div
+        h2 Custom Submit Link Button
+        p custom label for submit link button (blank for default):
+        input#custom_submit_link_button.form-control(type='text' name='custom_submit_link_button' placeholder='Submit a new link'
+                                    value=(undefined===subForum ? '' : subForum.custom_submit_link_button))  
+      div
+        h2 Custom Submit Text Post Button
+        p Custom label for submit text post button (blank for default):
+        input#custom_submit_text_button.form-control(type='text' name='custom_submit_text_button' placeholder='Submit a new text post'
+                                    value=(undefined===subForum ? '' : subForum.custom_submit_text_button))                                                                                                                                    
+    button.btn.btn-primary(type='submit') Submit
+  if errors 
+    ul
+      for error in errors
+       li!= error.msg

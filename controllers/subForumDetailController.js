@@ -200,3 +200,99 @@ exports.subForum_post =[
   }
 ]
 
+exports.subForum_edit_details_get = function(req,res,next){
+  if(res.locals.currentUser){
+    let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+    SubForum.findOne({name: {$regex: matchRegex}})
+    .populate({
+      path:'moderators',
+        populate: {
+          path: 'user'
+        }
+    })
+    .exec(function(err,subForum){
+      if(err){return next(err);}
+      if(!subForum){
+        var err = new Error('SubForum not found');
+        err.status = 404;
+        return next(err);
+      }
+      let mod = subForum.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+      if(mod){
+        if(mod.can_edit_sub_details){
+          console.log(mod.can_edit_sub_details)
+          res.render('subForum_edit_form', {title: 'Edit ' + subForum.name, subForum: subForum});
+        }
+        else{
+          res.redirect('/');
+        }
+      }
+      else{
+        res.redirect('/');
+      }
+    })
+  }
+  else{
+    res.redirect('/');
+  }
+}
+
+exports.subForum_edit_details_post = [
+  sanitizeBody('*').trim(),
+  body('title', 'titles must be less than 50 characters').isLength({max:50}),
+  body('description', 'descriptions must be less than 50 characters').isLength({max:500}),
+  body('sidebar','sidebar must be less than 10240 characters').isLength({max:10240}),
+  body('submission_text', 'submission text must be less than 1024 characters').isLength({max:1024}),
+  body('custom_submit_link_button', 'custom submit link button must be less than 25 characters').isLength({max:25}),
+  body('custom_submit_text_button', 'custom submit text  button must be less than 25 characters').isLength({max:25}),
+  (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+      res.render('subForum_edit_form', {title: 'Edit ' + req.body.name, errors: errors.array(), subForum: req.body});
+      return;
+    }
+    else{
+      let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+      SubForum.findOne({name: {$regex: matchRegex}})
+      .populate({
+        path:'moderators',
+          populate: {
+            path: 'user'
+          }
+      })
+      .exec(function(err,subForum){
+        if(err){return next(err);}
+        if(!subForum){
+          var err = new Error('SubForum not found');
+          err.status = 404;
+          return next(err);
+        }
+        let mod = subForum.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+        if(mod){
+          if(mod.can_edit_sub_details){
+            subForum.title = req.body.title;
+            subForum.description = req.body.description;
+            subForum.sidebar = req.body.sidebar;
+            subForum.submission_text = req.body.submission_text;
+            subForum.custom_submit_link_button = req.body.custom_submit_link_button;
+            subForum.custom_submit_text_button = req.body.custom_submit_text_button;
+            subForum.save(function(err){
+              if(err){return next(err);}
+              res.redirect('/r/'+subForum.name)
+            })
+          }
+          else{
+            var err = new Error('invalid permissions not found');
+            err.status = 403;
+            return next(err);
+          }
+        }
+        else{
+          var err = new Error('invalid permissions not found');
+          err.status = 403;
+          return next(err);
+        }
+      })
+    }
+  }
+]
