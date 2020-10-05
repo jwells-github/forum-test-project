@@ -46,11 +46,13 @@ exports.mod_access_get = function(req,res,next){
         });
       }
       else{
+        req.flash('info', 'You do not have permission to access that page')
         res.redirect('/');
       }
     })
   }
   else{
+    req.flash('info', 'You do not have permission to access that page')
     res.redirect('/');
   }
 }
@@ -288,11 +290,13 @@ exports.removed_list_get = function(req,res,next){
         })
       }
       else{
+        req.flash('info', 'You do not have permission to access that page')
         res.redirect('/');
       }
     })
   }
   else{
+    req.flash('info', 'You do not have permission to access that page')
     res.redirect('/');
   }
 }
