@@ -66,7 +66,7 @@ exports.post_get = function(req,res,next){
       if(res.locals.currentUser){
         comments = getUserVotes(results.comments, results.comment_upvotes, results.comment_downvotes);
       }
-      res.render('post_detail', {title: post.title, post: post, comments:comments});
+      res.render('post_detail', {title: post.title, post: post, comments:comments, flash_messages: req.flash('info')});
     })
   })
 }

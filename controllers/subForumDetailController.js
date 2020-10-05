@@ -150,7 +150,7 @@ exports.subForum_text_form_get = function(req,res,next){
     });
   }
   else{
-    req.flash('info', 'You must have an account in order to make a submission!')
+    req.flash('info', 'You must have an account in order to make a submission!');
     res.redirect('/signup');
   }
 }
@@ -225,6 +225,7 @@ exports.subForum_post =[
           });
           post.save(function(err){
             if(err){return next(err);}
+            req.flash('info', 'Post Created!')
             return res.redirect('/r/'+subForum.name+'/'+post._id);
           })
         }
