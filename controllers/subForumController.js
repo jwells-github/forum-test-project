@@ -25,7 +25,8 @@ exports.subForum_create_get = function(req,res,next){
     res.render('subForum_create_form', {title: 'Create a SubForum'});
   }
   else{
-    res.redirect('/');
+    req.flash('info', 'You must have an account to create a SubForum!')
+    res.redirect('/signup');
   }
 }
 
