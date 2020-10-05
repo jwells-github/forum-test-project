@@ -6,6 +6,7 @@ const User = require('../models/user');
 
 exports.user_create_get = function(req,res,next){
   if(res.locals.currentUser){
+    req.flash('info', 'You must log out before signing up for another account')
     res.redirect('/')
   }
   else{
