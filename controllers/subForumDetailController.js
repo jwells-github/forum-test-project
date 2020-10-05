@@ -50,6 +50,57 @@ exports.subForum_get = function(req,res,next){
   })
 }
 
+exports.subForum_sorted_get = function(req,res,next){
+  let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+  SubForum.findOne({name: {$regex: matchRegex}})
+  .populate('moderators')
+  .exec(function(err,subForum){
+    if(err){return next(err);}
+    if(!subForum){
+      var err = new Error('SubForum not found');
+      err.status = 404;
+      return next(err);
+    }
+    async.parallel({
+      posts:function(callback){
+        let sortParam = {}
+        if(req.route.path ==='/:subForumName/new'){
+          sortParam = {date_created_at:-1};
+        }
+        else if(req.route.path === '/:subForumName/top'){
+          sortParam = {upvote_count:-1};
+        }
+        Post.find({subForum:subForum._id})
+        .populate('subForum')
+        .sort(sortParam)
+        .exec(callback)
+      },
+      post_upvotes: function(callback){
+        if(res.locals.currentUser){
+          PostUpvote.find({submitter:res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{callback(null,[])}
+      },
+      post_downvotes: function(callback){
+        if(res.locals.currentUser){
+          PostDownvote.find({submitter:res.locals.currentUser._id})
+          .exec(callback);
+        }
+        else{callback(null,[])}
+      }
+    }, function(err,results){
+      if(err){return next(err);}
+      let posts = results.posts;
+      if(res.locals.currentUser){
+        posts = getUserVotes(results.posts, results.post_upvotes, results.post_downvotes);
+      }
+      res.render('subForum_detail', {title: subForum.title, subForum:subForum, posts:posts})
+    })
+  })
+}
+
+
 exports.subForum_text_form_get = function(req,res,next){
   if(res.locals.currentUser){
     let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")

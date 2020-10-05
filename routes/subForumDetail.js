@@ -5,6 +5,8 @@ var postDetailController = require('../controllers/postDetailController');
 var subForumModController = require('../controllers/subForumModController');
 
 router.get('/:subForumName', subForumDetailController.subForum_get);
+router.get('/:subForumName/new', subForumDetailController.subForum_sorted_get);
+router.get('/:subForumName/top', subForumDetailController.subForum_sorted_get);
 
 router.get('/:subForumName/mod_access', subForumModController.mod_access_get);
 
