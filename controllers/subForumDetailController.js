@@ -280,7 +280,7 @@ exports.subForum_edit_details_get = function(req,res,next){
       if(mod){
         if(mod.can_edit_sub_details){
           console.log(mod.can_edit_sub_details)
-          res.render('subForum_edit_form', {title: 'Edit ' + subForum.name, subForum: subForum});
+          res.render('subForum_edit_form', {title: 'Edit ' + subForum.name, is_mod: true, subForum: subForum});
         }
         else{
           req.flash('info', 'You do not have permission to edit this subforum')

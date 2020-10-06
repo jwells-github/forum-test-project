@@ -42,6 +42,7 @@ exports.mod_access_get = function(req,res,next){
           title: subForum.title, 
           subForum:subForum, 
           moderators: subForum.moderators,
+          is_mod: true,
           banned_users: results.banned_users
         });
       }
