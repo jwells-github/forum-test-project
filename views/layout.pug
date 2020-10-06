@@ -82,6 +82,9 @@ html
               div.submission-links
                 a(href= '/r/'+subForum.name+'/submit/link')=(subForum.custom_submit_link_button !== '' ? subForum.custom_submit_link_button : 'Submit a link') 
                 a(href= '/r/'+subForum.name+'/submit/text')=(subForum.custom_submit_text_button !== '' ? subForum.custom_submit_text_button : 'Submit a text post') 
+                if is_mod
+                  a(href= '/r/'+subForum.name+'/edit') Edit Subreddit Details
+                  a(href= '/r/'+subForum.name+'/mod_access') View Mod Access
               p=subForum.description
               p=subForum.sidebar
         else if posts

@@ -16,7 +16,7 @@ div.comment
     //- Comment has been removed
     else
       //- The user can see the removed post because they are a moderator
-      if is_moderator
+      if is_mod
         if !comment.is_deleted
           h2 COMMENT HAS BEEN REMOVED
         div.comment-details
@@ -45,7 +45,7 @@ div.comment
             -let clickAction = "deleteComment('"+  comment._id + "',this)"
             -let actionName = 'Delete'
             include action_confirmation.pug
-          if is_moderator
+          if is_mod
             if !comment.is_removed
               -let clickAction = "removeCommentToggle('"+post.subForum.name+"', '"+comment._id+"',false, this)"
               -let actionName = 'Remove'

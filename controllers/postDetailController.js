@@ -63,10 +63,15 @@ exports.post_get = function(req,res,next){
     }, function(err, results){
       if(err){return next(err);}
       let comments= results.comments;
+      let is_mod = false; 
       if(res.locals.currentUser){
         comments = getUserVotes(results.comments, results.comment_upvotes, results.comment_downvotes);
+        let mod = post.subForum.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id))
+        if(mod){
+          is_mod = true;
+        }
       }
-      res.render('post_detail', {title: post.title, post: post, comments:comments, flash_messages: req.flash('info')});
+      res.render('post_detail', {title: post.title, post: post, comments:comments, is_mod: is_mod, flash_messages: req.flash('info')});
     })
   })
 }

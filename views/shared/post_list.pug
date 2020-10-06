@@ -27,7 +27,7 @@ if posts
                   -let clickAction = "deletePost('"+post._id+"', this)"
                   -let actionName = 'Delete'
                   include action_confirmation.pug
-              if is_moderator
+              if is_mod
                   -let clickAction = "removePostToggle('"+post.subForum.name+"', '"+post._id+"', this)"
                   -let actionName = 'Remove'
                   include action_confirmation.pug

@@ -19,7 +19,12 @@ exports.subForum_get = function(req,res,next){
 
   let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
   SubForum.findOne({name: {$regex: matchRegex}})
-  .populate('moderators')
+  .populate({
+    path: 'moderators',
+      populate: {
+        path: 'user'
+      }
+  })
   .exec(function(err,subForum){
     if(err){return next(err);}
     if(!subForum){
@@ -76,7 +81,14 @@ exports.subForum_get = function(req,res,next){
       if(res.locals.currentUser){
         posts = getUserVotes(posts, results.post_upvotes, results.post_downvotes);
       }
-      res.render('subForum_detail', {title: subForum.title, subForum:subForum, posts:posts, flash_messages: req.flash('info')})
+      let is_mod = false;
+      if(res.locals.currentUser){
+        let mod = subForum.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+        if(mod){
+          is_mod = true;
+        }
+      }
+      res.render('subForum_detail', {title: subForum.title, is_mod:is_mod, subForum:subForum, posts:posts, flash_messages: req.flash('info')})
     })
   })
 }
@@ -84,7 +96,12 @@ exports.subForum_get = function(req,res,next){
 exports.subForum_sorted_get = function(req,res,next){
   let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
   SubForum.findOne({name: {$regex: matchRegex}})
-  .populate('moderators')
+  .populate({
+    path: 'moderators',
+      populate: {
+        path: 'user'
+      }
+  })
   .exec(function(err,subForum){
     if(err){return next(err);}
     if(!subForum){
@@ -127,7 +144,14 @@ exports.subForum_sorted_get = function(req,res,next){
       if(res.locals.currentUser){
         posts = getUserVotes(results.posts, results.post_upvotes, results.post_downvotes);
       }
-      res.render('subForum_detail', {title: subForum.title, subForum:subForum, posts:posts})
+      let is_mod = false;
+      if(res.locals.currentUser){
+        let mod = subForum.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+        if(mod){
+          is_mod = true;
+        }
+      }
+      res.render('subForum_detail', {title: subForum.title, is_mod:is_mod, subForum:subForum, posts:posts})
     })
   })
 }

@@ -1,16 +1,35 @@
 extends layout
 
 block content
-  - let is_moderator = false;
+  div.post-title
+    a(href=post.link)=post.title
+  div.post-details
+    span  Posted #{post.submission_age}
+    span
+      span by
+      a(href='/u/'+post.submitter.username) #{post.submitter.username}
+  div
+    if post.text !== ''
+      p= post.text
+  div.post-actions
+    -let commentString = (post.number_of_comments === 1 ? 'comment' : 'comments')
+    span #{post.number_of_comments} #{commentString}
+    if locals.currentUser
+      if String(locals.currentUser._id) === String(post.submitter._id)
+        -let clickAction = "deletePost('"+post._id+"', this)"
+        -let actionName = 'Delete'
+        include shared/action_confirmation.pug
+      if is_mod
+        if !post.is_removed
+          -let clickAction = "removePostToggle('"+post.subForum.name+"', '"+post._id+"',false, this)"
+          -let actionName = 'Remove'
+          include shared/action_confirmation.pug
+        else
+          -let clickAction = "removePostToggle('"+post.subForum.name+"', '"+post._id+"',true, this)"
+          -let actionName = 'Reinstate Post'
+          include shared/action_confirmation.pug
+      span.post-action-message
   if locals.currentUser
-    - let mod = post.subForum.moderators.find(moderator => String(moderator.user) === String(locals.currentUser._id))
-    if mod
-      - is_moderator = true;
-  h1= title
-  if post.text !== ''
-    p= post.text
-  if locals.currentUser
-    p real form not sub form
     form(method='POST')
       div.form-group
         textarea#text.form-control(type='text' name='text' required='true')
@@ -18,5 +37,6 @@ block content
   else
     p You must be logged in to post comments
   include shared/comment_list.pug
-
+  script
+    include ../public/javascripts/toggleActionConfirmation.js
 
