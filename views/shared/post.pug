@@ -1,0 +1,32 @@
+if !post.is_deleted && !post.is_removed
+  div.post
+    if(locals.currentUser)
+      div.voting-arrows 
+        button(onclick="upvotePost('"+post._id +"',this)" class=(post.user_vote === 1 ? 'upvote' : '')) ^
+        span.post-score= post.vote_score
+        button(onclick="downvotePost('"+post._id +"',this)" class=(post.user_vote === -1 ? 'downvote' : '')) v
+    div.post-body
+      - let detailURL = '/r/' + post.subForum.name + '/' + post._id
+      div.post-title
+        a(href=(post.link ==='' ? detailURL : post.link) target="_blank")= post.title 
+      div.post-info
+        span submitted #{post.submission_age} 
+        span by 
+          a(href='#')=post.submitter.username 
+        if is_front_page
+          span  to
+            a(href='/r/'+post.subForum.name)  /r/#{post.subForum.name} 
+      div.post-actions
+        - let commentString = (post.number_of_comments === 1 ? 'comment' : 'comments')
+        a(href=detailURL) #{post.number_of_comments} #{commentString}
+        if locals.currentUser
+          if String(locals.currentUser._id) === String(post.submitter._id)
+            -let clickAction = "deletePost('"+post._id+"', this)"
+            -let actionName = 'Delete'
+            include action_confirmation.pug
+        if is_mod
+            -let clickAction = "removePostToggle('"+post.subForum.name+"', '"+post._id+"', this)"
+            -let actionName = 'Remove'
+            include action_confirmation.pug
+        span.post-action-message
+    br
