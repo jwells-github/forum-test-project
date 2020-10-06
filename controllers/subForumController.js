@@ -88,6 +88,7 @@ exports.subForum_create_post = [
             subForum_moderator.subForum = subForum._id;
             subForum_moderator.save(function(err,){
               if(err){return next(err);}
+              req.flash('info', 'SubForum Created!')
               return res.redirect('/r/'+subForum.name);
             })
           })
