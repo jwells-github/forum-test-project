@@ -3,6 +3,27 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.sidebar{
+  width:300px;
+  text-align: center;
+}
+.sidebar p{
+  font-size:18px;
+  margin-top:10px;
+}
+
+.submission-links{
+  text-align: center;
+}
+
+.submission-links a{
+  display:block;
+  font-size:18px;
+  border:1px solid;
+  margin-top: 6px;
+  padding: 12px;
+}
+
 a {
   color: #00B7FF;
 }
@@ -60,9 +81,23 @@ a {
   padding-left:20px;
 }
 
+.comment-submission{
+  padding-left:14px;
+}
+
+.comment-submission span{
+  padding-left: 4px;
+}
+.comment-submission p{
+  padding-left:8px;
+}
+
+.comment-post-details{
+  font-size: 18px;
+}
 .post, .submission{
   display:flex;
-  height:100px
+  margin-bottom:14px;
 }
 
 .post-body{
@@ -116,7 +151,8 @@ a {
   margin-top: 8px;
 }
 .comment-text p{
-  margin-bottom: 12px;
+  margin-bottom: 4px;
+  font-size:18px;
 }
 
 .comment-actions{

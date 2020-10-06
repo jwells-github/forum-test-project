@@ -23,6 +23,7 @@ exports.profile_get = (req,res,next) =>{
       posts: function(callback){
         Post.find({submitter: user._id})
         .populate('subForum')
+        .populate('submitter')
         .limit(50)
         .exec(callback);
       },
@@ -31,8 +32,14 @@ exports.profile_get = (req,res,next) =>{
           .populate({
             path:'post',
               populate: {
-                path:'SubForum'
-              }
+                path:'subForum'
+              },
+          })
+          .populate({
+            path:'post',
+              populate: {
+                path:'submitter'
+              },
           })
         .exec(callback);
       },
