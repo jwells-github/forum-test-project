@@ -93,3 +93,9 @@ html
               p Welcome to my Forum Project
               div.submission-links
                 a(href='/subForums/create/') Create a SubForum
+                div.post-search
+                  form(method='POST' action='/search')
+                    div.searchbar
+                      label(for='search') Find a post:
+                      input#search(type='text' name='search' required='true')
+                    button(type='submit') Submit  

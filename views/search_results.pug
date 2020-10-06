@@ -2,10 +2,13 @@ extends layout
 
 block content
   h1 You Searched: #{title}
-  if subForums.length > 0
-    each subForum in subForums
-      a(href='/r/'+subForum.name) #{subForum.name}
-      p=subForum.description
+  if subForums
+      if subForums.length > 0
+        each subForum in subForums
+          a(href='/r/'+subForum.name) #{subForum.name}
+          p=subForum.description
+  else if posts
+    include shared/post_list.pug
   else
-    h1 No SubForums were found
+    h1 No results found
 

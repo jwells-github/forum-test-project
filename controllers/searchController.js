@@ -1,8 +1,14 @@
 const {body} = require('express-validator');
 const SubForum = require('../models/subForum');
+const async = require("async");
+
+const Post = require('../models/post');
+const PostUpvote = require("../models/votes/post_upvote");
+const PostDownvote = require("../models/votes/post_downvote");
+const getUserVotes = require('../public/javascripts/getUserVotes.js');
 
 exports.subForum_search_get = function(req,res){
-  let matchRegex = new RegExp("("+req.query.searchterm+")");
+  let matchRegex = new RegExp("("+req.query.searchterm+")","i");
   SubForum.find(
     { $or:[
         {name:{$regex: matchRegex}}, 
@@ -20,4 +26,58 @@ exports.subForum_search_post = [
   (req,res,next) => {
       res.redirect('/subforums/search?searchterm=' + req.body.search);
   }
+]
+
+exports.post_search_get = function(req,res,next){
+  let matchRegex = new RegExp("("+req.query.searchterm+")","i");
+
+  console.log(matchRegex)
+  async.parallel({
+    posts: function(callback){
+      Post.find(    
+        { $or:[
+          {title:{$regex: matchRegex}}, 
+          {text:{$regex: matchRegex}}, 
+      ]})
+      .populate('subForum')
+      .populate('submitter')
+      .limit(50)
+      .exec(callback);
+    },
+    post_upvotes: function(callback){
+      if(res.locals.currentUser){
+        PostUpvote.find({submitter: res.locals.currentUser._id})
+        .exec(callback);
+      }
+      else{ callback(null,[])}
+    },
+    post_downvotes: function(callback){
+      if(res.locals.currentUser){
+        PostDownvote.find({submitter: res.locals.currentUser._id})
+        .exec(callback);
+      }
+      else{ callback(null,[])}
+    }
+  }, function(err,results){
+    if(err){return next(err);}
+    let posts = results.posts;
+    if(res.locals.currentUser){
+      posts = getUserVotes(posts, results.post_upvotes, results.post_downvotes);
+    }
+    res.render('search_results', {title:req.query.searchterm, posts:posts})
+  })
+}
+
+exports.post_search_post = [
+  body('search').trim().escape(),
+  (req,res,next) => {
+      res.redirect('/search?searchterm=' + req.body.search);
+  }
+]
+
+exports.subforum_post_search_get = function(req,res,next){
+  
+}
+exports.subforum_post_search_post = [
+
 ]
