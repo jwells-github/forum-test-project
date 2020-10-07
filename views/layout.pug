@@ -85,6 +85,12 @@ html
                 if is_mod
                   a(href= '/r/'+subForum.name+'/edit') Edit Subreddit Details
                   a(href= '/r/'+subForum.name+'/mod_access') View Mod Access
+                div.subforum-post-search
+                  form(method='POST' action='/r/'+subForum.name+'/search')
+                    label(for='search') Search #{subForum.name}:
+                    div.searchbar
+                      input#search(type='text' name='search' required='true')
+                      button(type='submit') Submit  
               p=subForum.description
               p=subForum.sidebar
         else if posts

@@ -3,10 +3,14 @@ var router = express.Router();
 var subForumDetailController = require('../controllers/subForumDetailController');
 var postDetailController = require('../controllers/postDetailController');
 var subForumModController = require('../controllers/subForumModController');
+var searchController = require('../controllers/searchController');
 
 router.get('/:subForumName', subForumDetailController.subForum_get);
 router.get('/:subForumName/new', subForumDetailController.subForum_sorted_get);
 router.get('/:subForumName/top', subForumDetailController.subForum_sorted_get);
+
+router.get('/:subForumName/search', searchController.subforum_post_search_get)
+router.post('/:subForumName/search', searchController.subforum_post_search_post)
 
 router.get('/:subForumName/edit', subForumDetailController.subForum_edit_details_get);
 router.post('/:subForumName/edit', subForumDetailController.subForum_edit_details_post);

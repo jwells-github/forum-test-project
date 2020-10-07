@@ -7,8 +7,7 @@ block content
         each subForum in subForums
           a(href='/r/'+subForum.name) #{subForum.name}
           p=subForum.description
+      else
+        h1 No SubForums found
   else if posts
-    include shared/post_list.pug
-  else
-    h1 No results found
-
+     include shared/post_list.pug
