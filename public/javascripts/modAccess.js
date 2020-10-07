@@ -35,7 +35,7 @@ function banForm(event){
 function banUser(user_to_ban){
   fetchPost('./mod_access/ban/'+user_to_ban).then(response =>{
     if(response.status === 200){
-      console.log('good')
+      addUserToBanList(user_to_ban)
     }
     else{
       response.json().then(message =>{
@@ -45,6 +45,26 @@ function banUser(user_to_ban){
       })
     }
   })
+}
+
+function addUserToBanList(user){
+  const banlistDiv = document.getElementById('ban-list')
+  const bannedUserDiv = document.createElement("div"); 
+  bannedUserDiv.className += 'banned-user';
+  const usernameDiv = document.createElement("div"); 
+  usernameDiv.className += 'banned-user-name';
+  const usernameSpan = document.createElement("span"); 
+  usernameSpan.innerHTML = user;
+  const buttonDiv = document.createElement("div"); 
+  const unbanButton = document.createElement("button"); 
+  unbanButton.className += 'btn btn-danger';
+  unbanButton.innerHTML = 'Unban';  
+  unbanButton.onclick  = unbanUser(user);
+  bannedUserDiv.appendChild(usernameDiv);
+  usernameDiv.appendChild(usernameSpan);
+  bannedUserDiv.appendChild(buttonDiv);
+  buttonDiv.appendChild(unbanButton);
+  banlistDiv.prepend(bannedUserDiv);
 }
 
 function unbanUser(username){

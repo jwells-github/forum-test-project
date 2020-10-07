@@ -12,14 +12,15 @@ block content
       input(type='text' name='username' required)
       span(id='ban-error')
     button.btn.btn-primary(type='submit') Ban User
-    h2 Banned Users:
-  if banned_users
-    each user in banned_users
-      div.banned-user
-        div.banned-user-name
-          span= user.banned_user.username
-        div
-          button.btn.btn-danger(onclick="unbanUser('"+user.banned_user.username+"')") Unban
+  h2 Banned Users:
+  div#ban-list
+    if banned_users
+      each user in banned_users
+        div.banned-user
+          div.banned-user-name
+            span= user.banned_user.username
+          div
+            button.btn.btn-danger(onclick="unbanUser('"+user.banned_user.username+"')") Unban
   h2 Add a Moderator
   div.moderator.moderator-new
     form(method='POST')
