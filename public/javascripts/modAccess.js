@@ -67,14 +67,15 @@ function addUserToBanList(user){
   banlistDiv.prepend(bannedUserDiv);
 }
 
-function unbanUser(username){
+function unbanUser(username, element){
   fetchPost('./mod_access/unban/'+username).then(response =>{
     if(response.status === 200){
+      element.parentNode.parentNode.remove()
       console.log('good')
     }
     else{
-      response.json().then(message =>{
-        console.log('bad');        
+      response.json().then(message =>{     
+        console.log(message);  
       })
     }
   })

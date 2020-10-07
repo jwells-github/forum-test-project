@@ -20,7 +20,7 @@ block content
           div.banned-user-name
             span= user.banned_user.username
           div
-            button.btn.btn-danger(onclick="unbanUser('"+user.banned_user.username+"')") Unban
+            button.btn.btn-danger(onclick="unbanUser('"+user.banned_user.username+"', this)") Unban
   h2 Add a Moderator
   div.moderator.moderator-new
     form(method='POST')
