@@ -25,7 +25,7 @@ function changeModPermissions(event,modName){
 
 function banForm(event){
   event.preventDefault();
-  let form = document.getElementById('ban_form');
+  let form = document.getElementById('ban-form');
   let user_to_ban = form.querySelector("input[name='username']").value;
   console.log(user_to_ban);
   banUser(user_to_ban);
@@ -34,12 +34,14 @@ function banForm(event){
 
 function banUser(user_to_ban){
   fetchPost('./mod_access/ban/'+user_to_ban).then(response =>{
-    if(response.status = 200){
+    if(response.status === 200){
       console.log('good')
     }
     else{
       response.json().then(message =>{
-        console.log('bad');        
+        console.log(message); 
+        var element = document.getElementById('ban-error');       
+        element.innerHTML = 'ERROR: ' + message.error;
       })
     }
   })
@@ -47,7 +49,7 @@ function banUser(user_to_ban){
 
 function unbanUser(username){
   fetchPost('./mod_access/unban/'+username).then(response =>{
-    if(response.status = 200){
+    if(response.status === 200){
       console.log('good')
     }
     else{

@@ -227,9 +227,15 @@ a {
   font-weight: 560;
 }
 
-.ban-form input{
+#ban-form input{
   width:250px;
   margin-bottom: 10px;
+}
+
+#ban-error{
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .banned-user{
