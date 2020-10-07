@@ -71,7 +71,7 @@ exports.post_get = function(req,res,next){
           is_mod = true;
         }
       }
-      res.render('post_detail', {title: post.title, post: post, comments:comments, is_mod: is_mod, flash_messages: req.flash('info')});
+      res.render('post_detail', {title: post.title, post: post, comments:comments, subForum: post.subForum, is_mod: is_mod, flash_messages: req.flash('info')});
     })
   })
 }
