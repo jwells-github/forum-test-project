@@ -54,8 +54,20 @@ a {
   font-size:14px;
 }
 
-.subForum-search form{
+.subForum-search form,
+.post-search form{
   display:flex;
+}
+
+.post-search,
+.subforum-post-search{
+  margin-top: 14px;
+}
+.post-search input,
+.post-search button, 
+.subforum-post-search input,
+.subforum-post-search button{
+  height: 30px;
 }
 
 .subForum-search input{
@@ -213,4 +225,25 @@ a {
   text-align: center;
   font-size: 18px;
   font-weight: 560;
+}
+
+.ban-form input{
+  width:250px;
+  margin-bottom: 10px;
+}
+
+.banned-user{
+  display:flex;
+  align-items: center;
+  margin-bottom: 10px
+}
+
+.banned-user button{
+  font-size: 12px;
+  margin-left: 10px;
+}
+.banned-user-name{
+  width:250px;
+  text-align: center;
+  font-size: 16px;
 }
