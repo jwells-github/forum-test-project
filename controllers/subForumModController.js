@@ -365,3 +365,62 @@ exports.mod_permissions_post = (req,res,next) =>{
   }
 }
 
+exports.mod_remove = (req,res,next) =>{
+  if(res.locals.currentUser){
+    async.parallel({
+      subForum: function(callback){
+        let matchRegex = new RegExp("("+req.params.subForumName+")\\b","i")
+        SubForum.findOne({name:{$regex: matchRegex}})
+        .populate({
+          path:'moderators',
+            populate: {
+              path: 'user'
+            }
+        })
+        .exec(callback);
+      },
+      user: function(callback){
+        console.log(req.params.username)
+        User.findOne({username: req.params.username})
+        .exec(callback);
+      }
+    }, function(err,results){
+      if(err){return next(err);}
+      if(!results.subForum){
+        return res.status(404).send({error:'SubForum not found'});
+      }
+      if(!results.user){
+        return res.status(404).send({error:'User not found'});
+      }
+      let submitter_mod = results.subForum.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
+      if(!submitter_mod){
+        return res.status(403).send({error:'You have invalid permissions'});
+      }
+      // Moderators must have the power to appoint moderators to change permissions
+      if(!submitter_mod.can_appoint){
+        return res.status(403).send({error:'You have invalid permissions'});
+      }
+      let updated_mod = results.subForum.moderators.find(moderator => String(moderator.user._id) === String(results.user._id))
+      if(!updated_mod){
+        return res.status(403).send({error:'This User is not a moderator'});
+      }
+      // Prevent moderators from changing their own permissions
+      if(String(updated_mod.user._id) === String(submitter_mod.user._id)){
+        return res.status(403).send({error:'You may not change your own permissions'});
+      }
+      // Only the head moderator may change the permissions of a moderator who may appoint other moderators
+      if(updated_mod.can_appoint){
+        if(!submitter_mod.head_mod){
+          return res.status(403).send({error:'You have invalid permissions'});
+        }
+      } 
+      SubForumModerator.deleteOne({user:results.user._id}).exec(function(err){
+        if(err){return next(err);}
+        return res.sendStatus(200);
+      })
+    })
+  }
+  else{
+    return res.status(403).send({error:'You have invalid permissions'});
+  }
+}

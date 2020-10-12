@@ -22,6 +22,19 @@ function changeModPermissions(event,modName){
   return false;
 }
 
+function removeModerator(moderator_to_remove){
+  fetchPost('./mod_access/remove/'+moderator_to_remove).then(response =>{
+    if(response.status === 200){
+      document.getElementById(moderator_to_remove+'-error').innerHTML = 'Moderator Removed!'
+    }
+    else{
+      response.json().then(message =>{
+        document.getElementById(moderator_to_remove+'-error').innerHTML = message.error
+      })
+    }
+  })
+}
+
 function banForm(event){
   event.preventDefault();
   let form = document.getElementById('ban-form');

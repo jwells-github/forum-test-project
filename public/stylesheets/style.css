@@ -3,6 +3,15 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.header{
+  border-bottom: 1px solid black;
+  margin-bottom: 30px;
+}
+
+.main{ 
+  margin-bottom:40px;
+}
+
 .sidebar{
   width:300px;
   text-align: center;
@@ -190,7 +199,11 @@ a {
 
 .moderator{
   display:flex;
-  margin: 10px 0 25px;
+  margin: 10px 0 0;
+}
+
+.remove-moderator{
+  margin: 10px 0 10px 200px
 }
 
 .new-mod-form, 
@@ -221,7 +234,7 @@ a {
 .moderator p{
   justify-content: center;
   align-self: center;
-  width: 150px;
+  width: 200px;
   text-align: center;
   font-size: 18px;
   font-weight: 560;

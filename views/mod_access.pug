@@ -64,7 +64,8 @@ block content
             input(type='checkbox' name='can_remove' checked=moderator.can_remove)
             label(for='can_remove') Can Remove Posts and Comments
         button.btn.btn-primary(type='submit') Update Permissions  
-        p(id= mod_name + '-error')
+      p(id= mod_name + '-error')
+    button.btn.btn-danger.remove-moderator(onclick="removeModerator('"+mod_name+"')") Remove Moderator
   script
     include ../public/javascripts/fetchPost.js
     include ../public/javascripts/modAccess.js
