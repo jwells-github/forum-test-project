@@ -16,8 +16,9 @@ exports.user_create_get = function(req,res,next){
 
 exports.user_create_post = [
   sanitizeBody('*').trim(),
-  body('username', 'Usernames must be longer than 2 characters and may only contains Numbers, English characters and underscores')
+  body('username', 'Usernames must be longer than 2 characters, less than 21 and may only contains Numbers, English characters and underscores')
     .isLength({min:3})
+    .isLength({max:20})
     .custom(value =>{
       return User.findOne({'username': value}).then(user =>{
         if(user){
