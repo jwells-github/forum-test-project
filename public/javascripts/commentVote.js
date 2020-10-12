@@ -5,7 +5,6 @@ function upvoteComment(commentID, element){
       toggleClass(element, 'upvote')
     }
     else{
-      console.log('fail')
     } 
   });
 }
@@ -17,7 +16,6 @@ function downvoteComment(commentID, element){
       toggleClass(element, 'downvote')
     }
     else{
-      console.log('fail')
     } 
   });
 }

@@ -1,7 +1,6 @@
 const {body} = require('express-validator');
-const SubForum = require('../models/subForum');
 const async = require("async");
-
+const SubForum = require('../models/subForum');
 const Post = require('../models/post');
 const PostUpvote = require("../models/votes/post_upvote");
 const PostDownvote = require("../models/votes/post_downvote");

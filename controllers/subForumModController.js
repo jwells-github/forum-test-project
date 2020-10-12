@@ -380,7 +380,6 @@ exports.mod_remove = (req,res,next) =>{
         .exec(callback);
       },
       user: function(callback){
-        console.log(req.params.username)
         User.findOne({username: req.params.username})
         .exec(callback);
       }

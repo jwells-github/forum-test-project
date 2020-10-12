@@ -2,14 +2,10 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
-  if locals.currentUser
-    p YOU ARE LOGGED IN
-    a(href="/subForums/create") create sub
-
   - let is_front_page = true
   include shared/post_list.pug
   script
     include ../public/javascripts/postVote.js
     include ../public/javascripts/fetchPost.js
     include ../public/javascripts/toggleActionConfirmation.js
+    include ../public/javascripts/postDelete.js

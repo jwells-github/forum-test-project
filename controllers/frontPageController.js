@@ -73,9 +73,11 @@ exports.default_view_get =  function(req, res, next) {
 
 exports.sorted_get = function(req,res,next){
   let sortParam = {}
+  // Get most recent posts
   if(req.path === '/new'){
     sortParam = {date_created_at:-1};
   }
+  // Get most upvoted posts
   else if(req.path === '/top'){
     sortParam = {upvote_count:-1};
   }

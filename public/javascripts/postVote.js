@@ -5,7 +5,6 @@ function upvotePost(postID, element){
       toggleClass(element, 'upvote');
     }
     else{
-      console.log('fail')
     } 
   });
 }
@@ -17,7 +16,6 @@ function downvotePost(postID, element){
       toggleClass(element, 'downvote');
     }
     else{
-      console.log('fail')
     }
   });
 }

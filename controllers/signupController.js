@@ -1,7 +1,6 @@
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const bcrypt = require("bcryptjs");
-
 const User = require('../models/user');
 
 exports.user_create_get = function(req,res,next){

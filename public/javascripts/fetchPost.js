@@ -1,5 +1,4 @@
 async function fetchPost(url = '', data ={}) {
-  console.log(url);
   const response = await fetch(url, {
     method: 'POST', 
     mode: 'cors', 

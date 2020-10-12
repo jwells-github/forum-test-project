@@ -62,10 +62,11 @@ exports.post_get = function(req,res,next){
       }
     }, function(err, results){
       if(err){return next(err);}
-      let comments= results.comments;
+      let comments = results.comments;
       let is_mod = false; 
       if(res.locals.currentUser){
         comments = getUserVotes(results.comments, results.comment_upvotes, results.comment_downvotes);
+        // Check if the user is a moderator of the subreddit
         let mod = post.subForum.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id))
         if(mod){
           is_mod = true;

@@ -19,7 +19,8 @@ router.get('/:subForumName/mod_access', subForumModController.mod_access_get);
 router.post('/:subForumName/mod_access', subForumModController.mod_access_post);
 router.post('/:subForumName/mod_access/ban/:username', subForumModController.mod_access_ban);
 router.post('/:subForumName/mod_access/unban/:username', subForumModController.mod_access_unban);
-router.post('/:subForumName/mod_access/mod_permissions', subForumModController.mod_permissions_post)
+router.post('/:subForumName/mod_access/mod_permissions', subForumModController.mod_permissions_post);
+router.post('/:subForumName/mod_access/remove/:username', subForumModController.mod_remove);
 
 router.get('/:subForumName/removed', subForumModController.removed_list_get);
 

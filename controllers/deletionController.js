@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 const Comment =  require('../models/comment');
 
+// Delete a comment
 exports.comment_delete = (req,res,next) =>{
   if(res.locals.currentUser){
     Comment.findById(req.params.commentID)
@@ -19,8 +20,12 @@ exports.comment_delete = (req,res,next) =>{
       }
     })
   }
+  else{
+    return res.sendStatus(403);
+  }
 }
 
+// Delete a post
 exports.post_delete = (req,res,next) =>{
   if(res.locals.currentUser){ 
     Post.findById(req.params.postID)
@@ -38,5 +43,8 @@ exports.post_delete = (req,res,next) =>{
         });
       }
     })
+  }
+  else{
+    return res.sendStatus(403);
   }
 }

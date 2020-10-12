@@ -1,7 +1,6 @@
 const { body,validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const async = require("async");
-
 const SubForum = require('../models/subForum');
 const Post = require('../models/post');
 const PostUpvote = require("../models/votes/post_upvote");
@@ -218,13 +217,10 @@ exports.subForum_post =[
   (req,res,next) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-      console.log(errors);
       if(req.body.link){
-        console.log('going to link post')
         res.render('subForum_link_post_create', {title: 'Submit a post', errors: errors.array(), post: req.body});
       }
       else{
-        console.log('going to text post')
         res.render('subForum_text_post_create', {title: 'Submit a post', errors: errors.array(), subForum: req.body});
       }
       return; 
@@ -279,7 +275,6 @@ exports.subForum_edit_details_get = function(req,res,next){
       let mod = subForum.moderators.find(moderator => String(moderator.user._id) === String(res.locals.currentUser._id));
       if(mod){
         if(mod.can_edit_sub_details){
-          console.log(mod.can_edit_sub_details)
           res.render('subForum_edit_form', {title: 'Edit ' + subForum.name, is_mod: true, subForum: subForum});
         }
         else{

@@ -39,7 +39,6 @@ function banForm(event){
   event.preventDefault();
   let form = document.getElementById('ban-form');
   let user_to_ban = form.querySelector("input[name='username']").value;
-  console.log(user_to_ban);
   banUser(user_to_ban);
   return false;
 }
@@ -51,7 +50,6 @@ function banUser(user_to_ban){
     }
     else{
       response.json().then(message =>{
-        console.log(message); 
         var element = document.getElementById('ban-error');       
         element.innerHTML = 'ERROR: ' + message.error;
       })

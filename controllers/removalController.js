@@ -3,6 +3,7 @@ const SubForum = require('../models/subForum');
 const Comment =  require('../models/comment');
 const async = require("async");
 
+// Remove a comment or reinstate a removed comment
 exports.comment_remove_toggle = (req,res,next) =>{
   if(res.locals.currentUser){
     async.parallel({
@@ -20,6 +21,7 @@ exports.comment_remove_toggle = (req,res,next) =>{
         if(!results.comment || !results.subForum){
           return res.sendStatus(404);
         }
+        // Check if the user is a moderator
         let mod = results.subForum.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id));
         if(mod){
           if(mod.can_remove){
@@ -30,16 +32,17 @@ exports.comment_remove_toggle = (req,res,next) =>{
             })
           }
           else{
-            return res.sendStatus(404);
+            return res.sendStatus(403);
           }
         }
         else{
-          return res.sendStatus(404);
+          return res.sendStatus(403);
         }
     });
   }
 }
 
+// Remove a post or reinstate a removed post
 exports.post_remove_toggle = (req,res,next)=>{
   if(res.locals.currentUser){
     async.parallel({
@@ -57,6 +60,7 @@ exports.post_remove_toggle = (req,res,next)=>{
         if(!results.post || !results.subForum){
           return res.sendStatus(404);
         }
+        // Check if the user is a moderator
         let mod = results.subForum.moderators.find(moderator => String(moderator.user) === String(res.locals.currentUser._id));
         if(mod){
           if(mod.can_remove){
