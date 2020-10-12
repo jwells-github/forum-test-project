@@ -11,12 +11,11 @@ function changeModPermissions(event,modName){
 
   fetchPost('./mod_access/mod_permissions', data).then(response =>{
     if(response.status === 200){
-      console.log('yay');
+      document.getElementById(modName+'-error').innerHTML = 'Permissions changed!'
     }
     else{
       response.json().then(message =>{
         document.getElementById(modName+'-error').innerHTML = message.error
-        console.log('bad');
       });
     }
   })
@@ -71,7 +70,6 @@ function unbanUser(username, element){
   fetchPost('./mod_access/unban/'+username).then(response =>{
     if(response.status === 200){
       element.parentNode.parentNode.remove()
-      console.log('good')
     }
     else{
       response.json().then(message =>{     
