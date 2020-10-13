@@ -24,15 +24,15 @@ html
                 li
                   span |
                 li
-                  a SubForum1
+                  a(href="/r/news") News
                 li
-                  a SubForum2
+                  a(href="/r/music") Music
                 li
-                  a Sub3
+                  a(href="/r/technology") Technology
                 li
-                  a Sub4
+                  a(href="/r/pictures") Pictures
                 li
-                  a Sub5                      
+                  a(href="/r/videos") Videos         
           div.row
             div.col.page-title
               a(href=(subForum ? '/r/'+subForum.name: '/'))=(subForum ? subForum.name: 'All SubForums')
