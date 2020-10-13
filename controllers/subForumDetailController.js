@@ -202,7 +202,7 @@ exports.subForum_link_form_get = function(req,res,next){
 
 exports.subForum_post =[
   sanitizeBody('*').trim(),
-  body('title', 'Posts require a title').isLength({min:1}),
+  body('title', 'Posts require a title').isLength({min:1}).isLength({max:80}),
   body('link', 'Please enter a valid url').custom(value =>{
     if(/\b(https?):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|]/.test(value)){
       return true;
