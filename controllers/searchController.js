@@ -21,7 +21,7 @@ exports.subForum_search_get = function(req,res){
 }
 
 exports.subForum_search_post = [
-  body('search').trim().escape(),
+  body('search').trim(),
   (req,res,next) => {
       res.redirect('/subforums/search?searchterm=' + req.body.search);
   }
@@ -66,7 +66,7 @@ exports.post_search_get = function(req,res,next){
 }
 
 exports.post_search_post = [
-  body('search').trim().escape(),
+  body('search').trim(),
   (req,res,next) => {
       res.redirect('/search?searchterm=' + req.body.search);
   }
@@ -125,7 +125,7 @@ exports.subforum_post_search_get = function(req,res,next){
   })
 }
 exports.subforum_post_search_post = [
-  body('search').trim().escape(),
+  body('search').trim(),
   (req,res,next) => {
       res.redirect('/r/'+req.params.subForumName+'/search?searchterm='+req.body.search);
   }
